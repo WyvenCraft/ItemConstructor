@@ -1,0 +1,1967 @@
+ARMOR_SETS:
+  Mushroom_Armor:
+    # [potion] <potion>[;<multiplier>]
+    # [triple] <attributes or bonus_attributes>
+    # [double] <attributes or bonus_attributes>
+    # [<attribute>] <amount>
+    # [ability] <ability>
+    fullset_bonus:
+      - "[potion] night_vision"
+      - "[ability] night_affinity"
+    pieces:
+      - "MUSHROOM_ARMOR_HELMET"
+      - "MUSHROOM_ARMOR_CHESTPLATE"
+      - "MUSHROOM_ARMOR_LEGGINGS"
+      - "MUSHROOM_ARMOR_BOOTS"
+  Farming_Suit:
+    fullset_bonus:
+      - "[ability] farmer_aura"
+    pieces:
+      - "FARMING_SUIT_HELMET"
+      - "FARMING_SUIT_CHESTPLATE"
+      - "FARMING_SUIT_LEGGINGS"
+      - "FARMING_SUIT_BOOTS"
+  Angler_Armor:
+    fullset_bonus:
+      - "[ability] darkness_within"
+    pieces:
+      - "ANGLER_ARMOR_HELMET"
+      - "ANGLER_ARMOR_CHESTPLATE"
+      - "ANGLER_ARMOR_LEGGINGS"
+      - "ANGLER_ARMOR_BOOTS"
+  Pumpkin_Armor:
+    fullset_bonus:
+      - "[ability] pumpkin_buff"
+    pieces:
+      - "PUMPKIN_ARMOR_HELMET"
+      - "PUMPKIN_ARMOR_CHESTPLATE"
+      - "PUMPKIN_ARMOR_LEGGINGS"
+      - "PUMPKIN_ARMOR_BOOTS"
+  Cactus_Armor:
+    fullset_bonus:
+      - "[ability] deflect"
+    pieces:
+      - "CACTUS_ARMOR_HELMET"
+      - "CACTUS_ARMOR_CHESTPLATE"
+      - "CACTUS_ARMOR_LEGGINGS"
+      - "CACTUS_ARMOR_BOOTS"
+  Leaflet_Armor:
+    fullset_bonus:
+      - "[ability] energy_of_the_forest"
+    pieces:
+      - "LEAFLET_ARMOR_HELMET"
+      - "LEAFLET_ARMOR_CHESTPLATE"
+      - "LEAFLET_ARMOR_LEGGINGS"
+      - "LEAFLET_ARMOR_BOOTS"
+  Lapis_Armor:
+    fullset_bonus:
+      - "[health] 60"
+    pieces:
+      - "LAPIS_ARMOR_HELMET"
+      - "LAPIS_ARMOR_CHESTPLATE"
+      - "LAPIS_ARMOR_LEGGINGS"
+      - "LAPIS_ARMOR_BOOTS"
+  Miners_Outfit:
+    fullset_bonus:
+      - "[ability] haste"
+    pieces:
+      - "MINERS_OUTFIT_HELMET"
+      - "MINERS_OUTFIT_CHESTPLATE"
+      - "MINERS_OUTFIT_LEGGINGS"
+      - "MINERS_OUTFIT_BOOTS"
+  Golem_Armor:
+    fullset_bonus:
+      - "[ability] absorption"
+    pieces:
+      - "GOLEM_ARMOR_HELMET"
+      - "GOLEM_ARMOR_CHESTPLATE"
+      - "GOLEM_ARMOR_LEGGINGS"
+      - "GOLEM_ARMOR_BOOTS"
+  Miners_Armor:
+    fullset_bonus:
+      - "[ability] regeneration"
+    pieces:
+      - "MINER_ARMOR_HELMET"
+      - "MINER_ARMOR_CHESTPLATE"
+      - "MINER_ARMOR_LEGGINGS"
+      - "MINER_ARMOR_BOOTS"
+  Hardened_Diamond_Armor:
+    fullset_bonus: [ ]
+    pieces:
+      - "HARDENED_DIAMOND_ARMOR_HELMET"
+      - "HARDENED_DIAMOND_ARMOR_CHESTPLATE"
+      - "HARDENED_DIAMOND_ARMOR_LEGGINGS"
+      - "HARDENED_DIAMOND_ARMOR_BOOTS"
+  Fairy_Armor:
+    fullset_bonus:
+      - "[ability] fairys_outfit"
+    pieces:
+      - "FAIRY_ARMOR_HELMET"
+      - "FAIRY_ARMOR_CHESTPLATE"
+      - "FAIRY_ARMOR_LEGGINGS"
+      - "FAIRY_ARMOR_BOOTS"
+  Growth_Armor:
+    fullset_bonus:
+      - "[ability] growth"
+    pieces:
+      - "GROWTH_ARMOR_HELMET"
+      - "GROWTH_ARMOR_CHESTPLATE"
+      - "GROWTH_ARMOR_LEGGINGS"
+      - "GROWTH_ARMOR_BOOTS"
+  Monster_Hunter_Armor:
+    fullset_bonus:
+      - "[ability] monster_hunter"
+    pieces:
+      - "MONSTER_HUNTER_ARMOR_HELMET"
+      - "MONSTER_HUNTER_ARMOR_CHESTPLATE"
+      - "MONSTER_HUNTER_ARMOR_LEGGINGS"
+      - "MONSTER_HUNTER_ARMOR_BOOTS"
+  Magma_Armor:
+    fullset_bonus:
+      - "[ability] Absorb"
+    pieces:
+      - "MAGMA_ARMOR_HELMET"
+      - "MAGMA_ARMOR_CHESTPLATE"
+      - "MAGMA_ARMOR_LEGGINGS"
+      - "MAGMA_ARMOR_BOOTS"
+  Emerald_Armor:
+    fullset_bonus:
+      - "[ability] tank"
+    pieces:
+      - "EMERALD_ARMOR_HELMET"
+      - "EMERALD_ARMOR_CHESTPLATE"
+      - "EMERALD_ARMOR_LEGGINGS"
+      - "EMERALD_ARMOR_BOOTS"
+  Ember_Armor:
+    fullset_bonus:
+      - "[ability] nether_lord"
+    pieces:
+      - "EMBER_ARMOR_HELMET"
+      - "EMBER_ARMOR_CHESTPLATE"
+      - "EMBER_ARMOR_LEGGINGS"
+      - "EMBER_ARMOR_BOOTS"
+  Zombie_Armor:
+    fullset_bonus:
+      - "[ability] nether_lord"
+    pieces:
+      - "ZOMBIE_ARMOR_CHESTPLATE"
+      - "ZOMBIE_ARMOR_LEGGINGS"
+      - "ZOMBIE_ARMOR_BOOTS"
+  Blaze_Armor:
+    fullset_bonus:
+      - "[ability] blazing_aura"
+    pieces:
+      - "BLAZE_ARMOR_HELMET"
+      - "BLAZE_ARMOR_CHESTPLATE"
+      - "BLAZE_ARMOR_LEGGINGS"
+      - "BLAZE_ARMOR_BOOTS"
+  Ender_Armor:
+    fullset_bonus: [ ]
+    pieces:
+      - "ENDER_ARMOR_HELMET"
+      - "ENDER_ARMOR_CHESTPLATE"
+      - "ENDER_ARMOR_LEGGINGS"
+      - "ENDER_ARMOR_BOOTS"
+  Speedster_Armor:
+    fullset_bonus:
+      - "[ability] bonus_speed"
+    pieces:
+      - "SPEEDSTER_ARMOR_HELMET"
+      - "SPEEDSTER_ARMOR_CHESTPLATE"
+      - "SPEEDSTER_ARMOR_LEGGINGS"
+      - "SPEEDSTER_ARMOR_BOOTS"
+
+STATIC_ITEMS:
+  GRAPPLINGHOOK:
+    item:
+      name: "&6Grapplinghook"
+      lore:
+        - "&9&lRARE"
+    recipe-enabled: true
+    recipe:
+      - "xaa"
+      - "xba"
+      - "bxx"
+    ingredients:
+      a: ENCHANTED_STRING
+      b: STICK
+      x: AIR
+  DUMMY:
+    item:
+      name: "&aTraining Dummy"
+      lore:
+        - "&a&lUNCOMMON"
+    recipe-enabled: true
+    recipe:
+      - "aba"
+      - "aca"
+      - "aaa"
+    ingredients:
+      a: SPONGE;32
+      b: ARMOR_STAND
+      c: ENCHANTED_PUMPKIN
+ITEMS:
+  ENCHANTED_SPIDER_EYE:
+    item:
+      material: SPIDER_EYE
+      name: "&aEnchanted Spider Eye"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+    recipe-enabled: true
+    recipe:
+      - "xox"
+      - "ooo"
+      - "xox"
+    ingredients:
+      o: spider_eye;32
+      x: AIR
+  ENCHANTED_BOOK_BANE_OF_ARTHROPODS_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xps"
+    ingredients:
+      s: enchanted_spider_eye
+      p: ENCHANTED_PAPER
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Bane of Arthropods I"
+        - "&7Increases attack damage"
+        - "&7against arthropods."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        DAMAGE_ARTHROPODS: 1
+  ENCHANTED_BOOK_FIRE_ASPECT_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpb"
+    ingredients:
+      p: enchanted_paper
+      b: enchanted_blaze_rod
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Fire Aspect I"
+        - "&7Sets target on fire."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        FIRE_ASPECT: 1
+  ENCHANTED_BLAZE_ROD:
+    recipe-enabled: true
+    recipe:
+      - "xbx"
+      - "bbb"
+      - "xbx"
+    ingredients:
+      b: blaze_rod;32
+      x: AIR
+    item:
+      material: BLAZE_ROD
+      name: "&aEnchanted Blaze Rod"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_PAPER:
+    recipe-enabled: true
+    recipe:
+      - "xpx"
+      - "ppp"
+      - "xpx"
+    ingredients:
+      p: paper;32
+      x: AIR
+    item:
+      material: PAPER
+      name: "&aEnchanted Paper"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_SLIME_BALL:
+    recipe-enabled: true
+    recipe:
+      - "xsx"
+      - "sss"
+      - "xsx"
+    ingredients:
+      s: SLIME_BALL;32
+      x: AIR
+    item:
+      material: PAPER
+      name: "&aEnchanted Slimeball"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_KNOCKBACK_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_SLIME_BALL
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Knockback I"
+        - "&7Increases knockback dealt."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        KNOCKBACK: 1
+  ENCHANTED_GOLD_BLOCK:
+    recipe-enabled: true
+    recipe:
+      - "xgx"
+      - "ggg"
+      - "xgx"
+    ingredients:
+      g: GOLD_BLOCK;32
+      x: AIR
+    item:
+      material: GOLD_BLOCK
+      name: "&aEnchanted Gold Block"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_LOOTING_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_GOLD_BLOCK
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Looting I"
+        - "&7Increases amount of loot"
+        - "&7dropped when mob is killed."
+        - " "
+        - "&f&lCOMMON"
+      enchants:
+        LOOT_BONUS_MOBS: 1
+  ENCHANTED_FLINT:
+    recipe-enabled: true
+    recipe:
+      - "xfx"
+      - "fff"
+      - "xfx"
+    ingredients:
+      f: FLINT;32
+      x: AIR
+    item:
+      material: PAPER
+      name: "&aEnchanted Flint"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_SHARPNESS_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_FLINT
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Sharpness I"
+        - "&7Increases attack damage dealt"
+        - "&7to mobs, animals or other players."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        DAMAGE_ALL: 1
+  ENCHANTED_ROTTEN_FLESH:
+    recipe-enabled: true
+    recipe:
+      - "xrx"
+      - "rrr"
+      - "xrx"
+    ingredients:
+      r: ROTTEN_FLESH;32
+      x: AIR
+    item:
+      material: ROTTEN_FLESH
+      name: "&aEnchanted Rotten Flesh"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_SMITE_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_ROTTEN_FLESH
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Smite I"
+        - "&7Increases attack damage"
+        - "&7against undead mobs."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        DAMAGE_UNDEAD: 1
+  ENCHANTED_BOOK_FLAME_I:
+    recipe-enabled: true
+    recipe:
+      - "bxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      b: ENCHANTED_BLAZE_ROD
+      p: ENCHANTED_PAPER
+      e: BOW
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Flame I"
+        - "&7Arrows set target on fire."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        ARROW_FIRE: 1
+  ENCHANTED_BOOK_INFINITY_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpb"
+    ingredients:
+      p: ENCHANTED_PAPER
+      b: BOW
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Infinity I"
+        - "&7Shooting consumes no regular arrows."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        ARROW_INFINITE: 1
+  ENCHANTED_BONE:
+    recipe-enabled: true
+    recipe:
+      - "xbx"
+      - "bbb"
+      - "xbx"
+    ingredients:
+      b: BONE;32
+      x: AIR
+    item:
+      material: BONE
+      name: "&aEnchanted Bone"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_POWER_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_BONE
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Power I"
+        - "&7Increases damage dealt by arrows."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        ARROW_DAMAGE: 1
+  ENCHANTED_BOOK_PUNCH_I:
+    recipe-enabled: true
+    recipe:
+      - "sxx"
+      - "xpp"
+      - "xpa"
+    ingredients:
+      s: ENCHANTED_SLIME_BALL
+      p: ENCHANTED_PAPER
+      a: ARROW
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Punch I"
+        - "&7Increases knockback dealt."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        ARROW_KNOCKBACK: 1
+  ENCHANTED_PRISMARINE_CRYSTAL:
+    recipe-enabled: true
+    recipe:
+      - "xpx"
+      - "ppp"
+      - "xpx"
+    ingredients:
+      p: PRISMARINE_CRYSTALS;32
+      x: AIR
+    item:
+      material: PRISMARINE_CRYSTALS
+      name: "&aEnchanted Prismarine Crystals"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_AQUA_AFFINITY_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_PRISMARINE_CRYSTAL
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Aqua Affinity I"
+        - "&7Speeds up how fast you can mine"
+        - "&7blocks underwater."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        WATER_WORKER: 1
+  ENCHANTED_GUNPOWDER:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: GUNPOWDER;32
+      x: AIR
+    item:
+      material: GUNPOWDER
+      name: "&aEnchanted Gunpowder"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_BLAST_PROTECTION_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_GUNPOWDER
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Blast Protection I"
+        - "&7Provides protection against explosive damage"
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        PROTECTION_EXPLOSIONS: 1
+  ENCHANTED_BOOK_DEPTH_STRIDER_I:
+    recipe-enabled: true
+    recipe:
+      - "cxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      c: COD
+      p: ENCHANTED_PAPER
+      e: WATER_BUCKET
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Depth Strider I"
+        - "&7Increases underwater movement speed."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        DEPTH_STRIDER: 1
+  ENCHANTED_ARROW:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: ARROW;32
+      x: AIR
+    item:
+      material: ARROW
+      name: "&aEnchanted Arrow"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_PROJECTILE_PROTECTION_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_ARROW
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Projectile Protection I"
+        - "&7Reduces projectile damage."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        PROTECTION_PROJECTILE: 1
+  ENCHANTED_MAGMA_CREAM:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: MAGMA_CREAM;32
+      x: AIR
+    item:
+      material: MAGMA_CREAM
+      name: "&aEnchanted Magma Cream"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_FIRE_PROTECTION_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_MAGMA_CREAM
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Fire Protection I"
+        - "&7Reduces damage caused by"
+        - "&7fire and lava."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        PROTECTION_FIRE: 1
+  ENCHANTED_IRON_INGOT:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: IRON_INGOT;32
+      x: AIR
+    item:
+      material: IRON_INGOT
+      name: "&aEnchanted Iron Ingot"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_PROTECTION_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_IRON_INGOT
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Protection I"
+        - "&7Grants general protection against"
+        - "&7attacks, fire, lava, and falling."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 1
+  ENCHANTED_CACTUS:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: CACTUS;32
+      x: AIR
+    item:
+      material: CACTUS
+      name: "&aEnchanted Cactus"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_THORNS_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_CACTUS
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Thorns I"
+        - "&7Reflects some of the damage"
+        - "&7taken against the attacker."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        THORNS: 1
+  ENCHANTED_REDSTONE:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: REDSTONE;32
+      x: AIR
+    item:
+      material: REDSTONE
+      name: "&aEnchanted Redstone Dust"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_EFFICIENY_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_REDSTONE
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Efficiency I"
+        - "&7Increases the speed of which"
+        - "&7the tool breaks blocks."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        DIG_SPEED: 1
+  ENCHANTED_GOLD_INGOT:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: GOLD_INGOT;32
+      x: AIR
+    item:
+      material: GOLD_INGOT
+      name: "&aEnchanted Gold Ingot"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_FORTUNE_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_GOLD_INGOT
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Fortune I"
+        - "&7Increases block drops from mining."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        LOOT_BONUS_BLOCKS: 1
+  ENCHANTED_STRING:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: STRING;32
+      x: AIR
+    item:
+      material: STRING
+      name: "&aEnchanted String"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_SILKTOUCH_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_STRING
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Silk Touch I"
+        - "&7Mined blocks drop themselves."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        SILK_TOUCH: 1
+  ENCHANTED_FEATHER:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: FEATHER;32
+      x: AIR
+    item:
+      material: FEATHER
+      name: "&aEnchanted Feather"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BOOK_FEATHER_FALLING_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_FEATHER
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Feather Falling I"
+        - "&7Reduces fall and teleportation"
+        - "&7damage."
+        - ""
+        - "&f&lCOMMON"
+      enchants:
+        PROTECTION_FALL: 1
+  ENCHANTED_BOOK_UNBREAKING_I:
+    recipe-enabled: true
+    recipe:
+      - "xxx"
+      - "xpp"
+      - "xpe"
+    ingredients:
+      p: ENCHANTED_PAPER
+      e: ENCHANTED_ANVIL
+      x: AIR
+    item:
+      material: ENCHANTED_BOOK
+      name: "&fEnchanted Book"
+      lore:
+        - "&9Unbreaking I"
+        - "&7Increases item durability."
+        - ''
+        - "&f&lCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_ANVIL:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: ANVIL;32
+      x: AIR
+    item:
+      material: ANVIL
+      name: "&aEnchanted Anvil"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_GHAST_TEAR:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: GHAST_TEAR;32
+      x: AIR
+    item:
+      material: GHAST_TEAR
+      name: "&aEnchanted Ghast tear"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_ACACIA_LOG:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: ACACIA_LOG;32
+      x: AIR
+    item:
+      material: "ACACIA_LOG"
+      name: "&aEnchanted Acacia Log"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_EMERALD_BLOCK:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: EMERALD_BLOCK;32
+      x: AIR
+    item:
+      material: EMERALD_BLOCK
+      name: "&aEnchanted Emerald Block"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_IRON_BLOCK:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: IRON_BLOCK;32
+      x: AIR
+    item:
+      material: IRON_BLOCK
+      name: "&aEnchanted Iron Block"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_RED_MUSHROOM:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: RED_MUSHROOM;32
+      x: AIR
+    item:
+      material: RED_MUSHROOM
+      name: "&aEnchanted Red Mushroom"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_BROWN_MUSHROOM:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: BROWN_MUSHROOM;32
+      x: AIR
+    item:
+      material: BROWN_MUSHROOM
+      name: "&aEnchanted Brown Mushroom"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_COBBLESTONE:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: COBBLESTONE;32
+      x: AIR
+    item:
+      material: COBBLESTONE
+      name: "&aEnchanted Cobblestone"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_OAK_LOG:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: OAK_LOG;32
+      x: AIR
+    item:
+      material: OAK_LOG
+      name: "&aEnchanted Oak Log"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_HAY_BALE:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: HAY_BLOCK;32
+      x: AIR
+    item:
+      material: HAY_BLOCK
+      name: "&aEnchanted Hay Bale"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  ENCHANTED_PUMPKIN:
+    recipe-enabled: true
+    recipe:
+      - "xex"
+      - "eee"
+      - "xex"
+    ingredients:
+      e: PUMPKIN;32
+      x: AIR
+    item:
+      material: HAY_BLOCK
+      name: "&aEnchanted Hay Bale"
+      lore:
+        - "&a&lUNCOMMON"
+      enchants:
+        DURABILITY: 1
+  MUSHROOM_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: ENCHANTED_RED_MUSHROOM
+      x: AIR
+    defense: 10
+    item:
+      commands_as_result: true
+      commands:
+        - "armorplus give mushroom_armor {player} helmet 1"
+      material: LEATHER_HELMET
+      name: "&fMushroom Armor Helmet"
+      lore:
+        - "&7Defense: &a+10"
+        - ""
+        - "{bonus:night_affinity}"
+        - ""
+        - "&f&lCOMMON"
+      color: "#fc4d4d"
+  MUSHROOM_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: ENCHANTED_RED_MUSHROOM
+      x: AIR
+    defense: 16
+    item:
+      commands_as_result: true
+      commands:
+        - "armorplus give mushroom_armor {player} chestplate 1"
+      material: LEATHER_CHESTPLATE
+      name: "&fMushroom Armor Chestplate"
+      lore:
+        - "&7Defense: &a+16"
+        - ""
+        - "{bonus:night_affinity}"
+        - ""
+        - "&f&lCOMMON"
+      color: "#fc4d4d"
+  MUSHROOM_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_RED_MUSHROOM
+      x: AIR
+    defense: 14
+    item:
+      commands_as_result: true
+      commands:
+        - "armorplus give mushroom_armor {player} leggings 1"
+      material: LEATHER_LEGGINGS
+      name: "&fMushroom Armor Leggings"
+      lore:
+        - "&7Defense: &a+14"
+        - ""
+        - "{bonus:night_affinity}"
+        - ""
+        - "&f&lCOMMON"
+      color: "#fc4d4d"
+  MUSHROOM_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_RED_MUSHROOM
+      x: AIR
+    defense: 8
+    item:
+      material: LEATHER_BOOTS
+      name: "&fMushroom Armor Boots"
+      lore:
+        - "&7Defense: &a+8"
+        - ""
+        - "{bonus:night_affinity}"
+        - ""
+        - "&f&lCOMMON"
+      color: "#fc4d4d"
+  FARMING_SUIT_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: HAY_BLOCK
+      x: AIR
+    defense: 15
+    item:
+      material: LEATHER_HELMET
+      name: "&9Farmer Suit Helmet"
+      lore:
+        - '&7Defense: &a+15'
+        - ""
+        - "{bonus:farmer_aura}"
+        - ""
+        - "&9&lRARE"
+      color: "#fc0080"
+  FARMING_SUIT_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: HAY_BLOCK
+      x: AIR
+    defense: 40
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&9Farming Suit Chestplate"
+      lore:
+        - '&7Defense: &a+40'
+        - ""
+        - "{bonus:farmer_aura}"
+        - ""
+        - "&9&lRARE"
+      color: "#fc0080"
+  FARMING_SUIT_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: HAY_BLOCK
+      x: AIR
+    defense: 30
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&9Farming Suit Leggings"
+      lore:
+        - '&7Defense: &a+30'
+        - ""
+        - "{bonus:farmer_aura}"
+        - ""
+        - "&9&lRARE"
+      color: "#fc0080"
+  FARMING_SUIT_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: HAY_BLOCK
+      x: AIR
+    defense: 15
+    item:
+      material: LEATHER_BOOTS
+      name: "&9Farming Suit Boots"
+      lore:
+        - '&7Defense: &a+15'
+        - ""
+        - "{bonus:farmer_aura}"
+        - ""
+        - "&9&lRARE"
+      color: "#fc0080"
+  ANGLER_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: SALMON
+      x: AIR
+    defense: 15
+    item:
+      material: DIAMOND_HELMET
+      name: "&fAngler Helmet"
+      lore:
+        - '&7Defense: &a+15'
+        - ""
+        - "{bonus:depth_champion}"
+        - ""
+        - "{bonus:deepness_within}"
+        - ""
+        - "&f&lCOMMON HELMET"
+  ANGLER_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: SALMON
+      x: AIR
+    defense: 40
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&fAngler Chestplate"
+      lore:
+        - '&7Defense: &a+40'
+        - ""
+        - "{bonus:depth_champion}"
+        - ""
+        - "{bonus:deepness_within}"
+        - ""
+        - "&f&lCOMMON CHESTPLATE"
+      color: "#0b004f"
+  ANGLER_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: SALMON
+      x: AIR
+    defense: 30
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&fAngler Leggings"
+      lore:
+        - '&7Defense: &a+30'
+        - ""
+        - "{bonus:depth_champion}"
+        - ""
+        - "{bonus:deepness_within}"
+        - ""
+        - "&f&lCOMMON LEGGINGS"
+      color: "#0b004f"
+  ANGLER_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: SALMON
+      x: AIR
+    defense: 15
+    item:
+      material: LEATHER_BOOTS
+      name: "&fAngler Boots"
+      lore:
+        - '&7Defense: &a+15'
+        - ""
+        - "{bonus:depth_champion}"
+        - ""
+        - "{bonus:deepness_within}"
+        - ""
+        - "&f&lCOMMON BOOTS"
+      color: "#0b004f"
+  PUMPKIN_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: PUMPKIN
+      x: AIR
+    defense: 8
+    health: 8
+    item:
+      material: LEATHER_HELMET
+      name: "&fPumpkin Helmet"
+      lore:
+        - '&7Defense: &a+8'
+        - "&7Health: &c+8"
+        - ""
+        - "{bonus:pumpkin_buff}"
+        - ""
+        - "&f&lCOMMON HELMET"
+      color: "#edaa36"
+  PUMPKIN_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: PUMPKIN
+      x: AIR
+    defense: 14
+    health: 14
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&fPumpkin Chestplate"
+      lore:
+        - '&7Defense: &a+14'
+        - "&7Health: &c+14"
+        - ""
+        - "{bonus:pumpkin_buff}"
+        - ""
+        - "&f&lCOMMON CHESTPLATE"
+      color: "#edaa36"
+  PUMPKIN_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: PUMPKIN
+      x: AIR
+    defense: 10
+    health: 10
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&fPumpkin Leggings"
+      lore:
+        - '&7Defense: &a+10'
+        - "&7Health: &c+10"
+        - ""
+        - "{bonus:pumpkin_buff}"
+        - ""
+        - "&f&lCOMMON LEGGINGS"
+      defense: 10
+      health: 10
+      color: "#edaa36"
+  PUMPKIN_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: PUMPKIN
+      x: AIR
+    defense: 8
+    health: 8
+    item:
+      material: LEATHER_BOOTS
+      name: "&fPumpkin Boots"
+      lore:
+        - '&7Defense: &a+8'
+        - "&7Health: &c+8"
+        - ""
+        - "{bonus:pumpkin_buff}"
+        - ""
+        - "&f&lCOMMON BOOTS"
+      color: "#edaa36"
+  CACTUS_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: CACTUS
+      x: AIR
+    defense: 10
+    health: 5
+    item:
+      material: LEATHER_HELMET
+      name: "&fCactus Helmet"
+      lore:
+        - '&7Defense: &a+10'
+        - "&7Health: &a+5"
+        - ""
+        - "{bonus:deflect}"
+        - ""
+        - "&f&lCOMMON HELMET"
+      color: "#00FF00"
+  CACTUS_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: CACTUS
+      x: AIR
+    defense: 25
+    health: 15
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&fCactus Chestplate"
+      lore:
+        - '&7Defense: &a+25'
+        - "&7Health: &a+15"
+        - ""
+        - "{bonus:deflect}"
+        - ""
+        - "&f&lCOMMON CHESTPLATE"
+      color: "#00FF00"
+  CACTUS_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: CACTUS
+      x: AIR
+    defense: 20
+    health: 10
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&fCactus Leggings"
+      lore:
+        - '&7Defense: &a+20'
+        - "&7Health: &a+10"
+        - ""
+        - "{bonus:deflect}"
+        - ""
+        - "&f&lCOMMON LEGGINGS"
+      color: "#00FF00"
+  CACTUS_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: CACTUS
+      x: AIR
+    defense: 10
+    health: 5
+    item:
+      material: LEATHER_BOOTS
+      name: "&fCactus Boots"
+      lore:
+        - '&7Defense: &a+10'
+        - "&7Health: &c+5"
+        - ""
+        - "{bonus:deflect}"
+        - ""
+        - "&f&lCOMMON BOOTS"
+      color: "#00FF00"
+  LEAFLET_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    health: 20
+    item:
+      material: OAK_LEAVES
+      name: "&fLeaflet Helmet"
+      lore:
+        - "&7Health: &a+20"
+        - ""
+        - "{bonus:energy_of_the_forest}"
+        - ""
+        - "&f&lCOMMON HELMET"
+  LEAFLET_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    health: 35
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&fLeaflet Chestplate"
+      lore:
+        - "&7Health: &a+35"
+        - ""
+        - "{bonus:energy_of_the_forest}"
+        - ""
+        - "&f&lCOMMON CHESTPLATE"
+      color: "#4dcc4d"
+  LEAFLET_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    health: 30
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&fLeaflet Leggings"
+      lore:
+        - "&7Health: &a+30"
+        - ""
+        - "{bonus:energy_of_the_forest}"
+        - ""
+        - "&f&lCOMMON LEGGINGS"
+      color: "#4dcc4d"
+  LEAFLET_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    health: 15
+    item:
+      material: LEATHER_BOOTS
+      name: "&fLeaflet Boots"
+      lore:
+        - "&7Health: &c+15"
+        - ""
+        - "{bonus:energy_of_the_forest}"
+        - ""
+        - "&f&lCOMMON BOOTS"
+      color: "#4dcc4d"
+  LAPIS_ARMOR_HELMET:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    defense: 25
+    item:
+      material: SEA_LANTERN
+      name: "&aLapis Armor Helmet"
+      lore:
+        - "&7Defense: &a+25"
+        - ""
+        - "{bonus:health}"
+        - ""
+        - "&a&lUNCOMMON HELMET"
+  LAPIS_ARMOR_CHESTPLATE:
+    recipe-enabled: false
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&aLapis Armor Chestplate"
+      lore:
+        - "&7Defense: &a+40"
+        - ""
+        - "{bonus:health}"
+        - ""
+        - "&a&lUNCOMMON CHESTPLATE"
+      color: "#0000FF"
+    defense: 40
+  LAPIS_ARMOR_LEGGINGS:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&aLapis Armor Leggings"
+      lore:
+        - "&7Defense: &a+35"
+        - ""
+        - "{bonus:health}"
+        - ""
+        - "&a&lUNCOMMON LEGGINGS"
+      color: "#0000FF"
+    defense: 35
+  LAPIS_ARMOR_BOOTS:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: OAK_LEAVES
+      x: AIR
+    item:
+      material: LEATHER_BOOTS
+      name: "&aLapis Armor Boots"
+      lore:
+        - "&7Defense: &a+20"
+        - ""
+        - "{bonus:health}"
+        - ""
+        - "&a&lUNCOMMON BOOTS"
+      color: "#0000FF"
+    defense: 20
+  MINERS_OUTFIT_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: ENCHANTED_COBBLESTONE
+      x: AIR
+    item:
+      material: LEATHER_HELMET
+      name: "&aMiner's Outfit Helmet"
+      lore:
+        - "&7Defense: &a+15"
+        - ""
+        - "{bonus:haste}"
+        - ""
+        - "&a&lUNCOMMON HELMET"
+      color: "#453527"
+    defense: 15
+
+  MINERS_OUTFIT_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: ENCHANTED_COBBLESTONE
+      x: AIR
+    item:
+      material: LEATHER_CHESTPLATE
+      name: "&aMiner's Outfit Chestplate"
+      lore:
+        - "&7Defense: &a+40"
+        - ""
+        - "{bonus:haste}"
+        - ""
+        - "&a&lUNCOMMON CHESTPLATE"
+      color: "#453527"
+    defense: 40
+
+  MINERS_OUTFIT_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_COBBLESTONE
+      x: AIR
+    item:
+      material: LEATHER_LEGGINGS
+      name: "&aMiner's Outfit Leggings"
+      lore:
+        - "&7Defense: &a+30"
+        - ""
+        - "{bonus:haste}"
+        - ""
+        - "&a&lUNCOMMON LEGGINGS"
+      color: "#453527"
+    defense: 30
+
+  MINERS_OUTFIT_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_COBBLESTONE
+      x: AIR
+    item:
+      material: LEATHER_BOOTS
+      name: "&aMiner's Outfit Boots"
+      lore:
+        - "&7Defense: &a+15"
+        - ""
+        - "{bonus:haste}"
+        - ""
+        - "&a&lUNCOMMON BOOTS"
+      color: "#453527"
+    defense: 15
+
+  GOLEM_ARMOR_HELMET:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: IRON_HELMET
+      name: "&9Golem Armor Helmet"
+      lore:
+        - "&7Defense: &a+45"
+        - "&7Health: &a+45"
+        - ""
+        - "{bonus:absorption}"
+        - ""
+        - "&9&lRARE HELMET"
+    defense: 45
+    health: 45
+  GOLEM_ARMOR_CHESTPLATE:
+    recipe-enabled: true
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: IRON_CHESTPLATE
+      name: "&9Golem Armor Chestplate"
+      lore:
+        - "&7Defense: &a+90"
+        - "&7Health: &a+65"
+        - ""
+        - "{bonus:absorption}"
+        - ""
+        - "&9&lRARE CHESTPLATE"
+    defense: 90
+    health: 65
+  GOLEM_ARMOR_LEGGINGS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: IRON_LEGGINGS
+      name: "&9Golem Armor Leggings"
+      lore:
+        - "&7Defense: &a+75"
+        - "&7Health: &a+55"
+        - ""
+        - "{bonus:absorption}"
+        - ""
+        - "&9&lRARE LEGGINGS"
+    defense: 75
+    health: 55
+  GOLEM_ARMOR_BOOTS:
+    recipe-enabled: true
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: IRON_BOOTS
+      name: "&9Golem Armor Boots"
+      lore:
+        - "&7Defense: &a+40"
+        - "&7Health: &a+40"
+        - ""
+        - "{bonus:absorption}"
+        - ""
+        - "&9&lRARE BOOTS"
+    defense: 40
+    health: 40
+  MINER_ARMOR_HELMET:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "xxx"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: DIAMOND_HELMET
+      name: "&9Miner Helmet"
+      lore:
+        - "&7Defense: &a+5 &8(+45 in mines)"
+        - ""
+        - "{bonus:regeneration}"
+        - ""
+        - "&9&lRARE HELMET"
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 5
+    defense: 5
+
+  MINER_ARMOR_CHESTPLATE:
+    recipe-enabled: false
+    recipe:
+      - "exe"
+      - "eee"
+      - "eee"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: DIAMOND_CHESTPLATE
+      name: "&9Miner Chestplate"
+      lore:
+        - "&7Defense: &a+5 &8(+95 in mines)"
+        - ""
+        - "{bonus:regeneration}"
+        - ""
+        - "&9&lRARE CHESTPLATE"
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 5
+    defense: 5
+
+  MINER_ARMOR_LEGGINGS:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: DIAMOND_LEGGINGS
+      name: "&9Miner Leggings"
+      lore:
+        - "&7Defense: &a+5 &8(+70 in mines)"
+        - ""
+        - "{bonus:regeneration}"
+        - ""
+        - "&9&lRARE LEGGINGS"
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 5
+    defense: 5
+
+  MINER_ARMOR_BOOTS:
+    recipe-enabled: false
+    recipe:
+      - "eee"
+      - "exe"
+      - "exe"
+    ingredients:
+      e: ENCHANTED_IRON_INGOT;10
+      x: AIR
+    item:
+      material: DIAMOND_BOOTS
+      name: "&9Miner Boots"
+      lore:
+        - "&7Defense: &a+5 &8(+45 in mines)"
+        - ""
+        - "{bonus:regeneration}"
+        - ""
+        - "&9&lRARE BOOTS"
+      enchants:
+        PROTECTION_ENVIRONMENTAL: 5
+    defense: 5
