@@ -1,15 +1,16 @@
 package com.wyvencraft.items.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.attributes.AttributesHandler;
-import com.wyvencraft.wyvencore.common.PDCItem;
-import com.wyvencraft.wyvencore.customitems.ArmorPiece;
-import com.wyvencraft.wyvencore.customitems.ArmorSet;
-import com.wyvencraft.wyvencore.events.FullSetBuffEvent;
-import com.wyvencraft.wyvencore.events.FullSetDebuffEvent;
-import com.wyvencraft.wyvencore.player.PlayerStats;
-import com.wyvencraft.wyvencore.utils.CmdAction;
+import com.wyvencraft.common.PDCItem;
+import com.wyvencraft.interfaces.IWyvenCore;
+import com.wyvencraft.items.ArmorPiece;
+import com.wyvencraft.items.ArmorSet;
+import com.wyvencraft.items.WyvenItems;
+import com.wyvencraft.items.events.FullSetBuffEvent;
+import com.wyvencraft.items.events.FullSetDebuffEvent;
+import com.wyvencraft.player.PlayerStats;
+import com.wyvencraft.utils.CmdAction;
+import org.apache.logging.log4j.core.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,16 +19,22 @@ import org.bukkit.event.Listener;
 
 public class ArmorSetListener implements Listener {
 
-    Core plugin = Core.instance;
+    WyvenItems addon;
+    IWyvenCore plugin;
+
+    public ArmorSetListener(WyvenItems addon){
+        this.addon = addon;
+        plugin = addon.getPlugin();
+    }
 
     @EventHandler
     public void onEquipArmor(PlayerArmorChangeEvent e) {
         if (e.getNewItem() != null && e.getNewItem().getType() != Material.AIR) {
             PDCItem pdc = new PDCItem(e.getNewItem());
 
-            if (!pdc.hasKey(plugin.WYVENKEY)) return;
+            if (!pdc.hasKey(plugin.getPlugin().WYVENKEY)) return;
 
-            ArmorPiece armorPiece = plugin.getItemManager().getArmorPiece(e.getNewItem());
+            ArmorPiece armorPiece = addon.getItemManager().getArmorPiece(e.getNewItem());
             if (armorPiece == null) return;
 
             PlayerStats ps = plugin.getStatsManager().getPlayerStats(e.getPlayer().getUniqueId());

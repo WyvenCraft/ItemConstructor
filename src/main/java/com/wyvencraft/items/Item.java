@@ -1,6 +1,6 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.wyvencore.customitems.recipes.Recipe;
+import com.wyvencraft.items.recipes.Recipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 

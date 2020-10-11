@@ -1,19 +1,16 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.common.ItemBuilder;
-import com.wyvencraft.wyvencore.common.PDCItem;
-import com.wyvencraft.wyvencore.customitems.ArmorPiece;
-import com.wyvencraft.wyvencore.customitems.ArmorSet;
-import com.wyvencraft.wyvencore.customitems.Item;
-import com.wyvencraft.wyvencore.customitems.items.Dummy;
-import com.wyvencraft.wyvencore.customitems.items.GrapplingHook;
-import com.wyvencraft.wyvencore.customitems.items.StaticItem;
-import com.wyvencraft.wyvencore.customitems.recipes.Recipe;
-import com.wyvencraft.wyvencore.enchantments.Enchant;
-import com.wyvencraft.wyvencore.player.PlayerStats;
-import com.wyvencraft.wyvencore.utils.Debug;
-import com.wyvencraft.wyvencore.utils.Methods;
+import com.wyvencraft.common.ItemBuilder;
+import com.wyvencraft.common.PDCItem;
+import com.wyvencraft.interfaces.IWyvenCore;
+import com.wyvencraft.items.items.Dummy;
+import com.wyvencraft.items.items.GrapplingHook;
+import com.wyvencraft.items.items.StaticItem;
+import com.wyvencraft.items.recipes.Recipe;
+import com.wyvencraft.player.PlayerStats;
+import com.wyvencraft.player.WyvenPlayer;
+import com.wyvencraft.utils.Debug;
+import com.wyvencraft.utils.Methods;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,23 +24,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
+    private WyvenItems addon;
+    private final IWyvenCore plugin;
 
-    Core plugin;
+    public ItemManager(WyvenItems addon) {
+        this.addon = addon;
+        this.plugin = addon.getPlugin();
 
-    public static ItemManager instance;
-
-    public ItemManager(Core plugin) {
-        this.plugin = plugin;
-
-        instance = this;
-
-        headwearableKey = new NamespacedKey(plugin, "helmet");
+        headwearableKey = new NamespacedKey(plugin.getPlugin(), "helmet");
 
         loadItems();
         new GrapplingHook();
         new Dummy();
 
-        for (com.wyvencraft.wyvencore.customitems.Item cItem : customItems) {
+        for (Item cItem : customItems) {
             if (cItem.isHasRecipe()) {
                 cItem.setRecipe(new Recipe(cItem, false));
             }
@@ -54,7 +48,7 @@ public class ItemManager {
 
     private final NamespacedKey headwearableKey;
 
-    public List<com.wyvencraft.wyvencore.customitems.Item> customItems = new ArrayList<>();
+    public List<Item> customItems = new ArrayList<>();
     public List<ArmorSet> armorSets = new ArrayList<>();
     public List<ArmorPiece> armorPieces = new ArrayList<>();
 
@@ -105,7 +99,7 @@ public class ItemManager {
 
                 NamespacedKey itemKey = new NamespacedKey(plugin, name);
 
-                com.wyvencraft.wyvencore.customitems.Item cItem = new com.wyvencraft.wyvencore.customitems.Item(name, stack, itemKey, hasRecipe, false);
+                Item cItem = new Item(name, stack, itemKey, hasRecipe, false);
 
                 customItems.add(cItem);
 
@@ -128,7 +122,7 @@ public class ItemManager {
                 List<String> fullsetBonus = setsSection.getStringList(id + ".fullset_bonus");
                 List<String> pieces = new ArrayList<>();
                 for (String pieceName : setsSection.getStringList(id + ".pieces")) {
-                    com.wyvencraft.wyvencore.customitems.Item piece = getCustomItem(pieceName);
+                    Item piece = getCustomItem(pieceName);
 
                     if (piece == null) {
                         plugin.getLogger().severe("could not load " + pieceName + " for " + id);
@@ -165,7 +159,7 @@ public class ItemManager {
         }
 
         ItemStack stack = builder
-                .withPDCString(plugin.WYVENKEY, item.name())
+                .withPDCString(plugin.getKey(), item.name())
                 .withItemFlag(
                         ItemFlag.HIDE_UNBREAKABLE,
                         ItemFlag.HIDE_ATTRIBUTES,
@@ -175,14 +169,14 @@ public class ItemManager {
                         ItemFlag.HIDE_POTION_EFFECTS).withUnbreakable(true)
                 .build();
 
-        NamespacedKey itemKey = new NamespacedKey(plugin, item.name());
+        NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), item.name());
 
         boolean hasRecipe = false;
         if (section.get(item.name() + ".recipe-enabled") != null) {
             hasRecipe = section.getBoolean(item.name() + ".recipe-enabled");
         }
 
-        com.wyvencraft.wyvencore.customitems.Item cItem = new com.wyvencraft.wyvencore.customitems.Item(item.name(), stack, itemKey, hasRecipe, true);
+        Item cItem = new Item(item.name(), stack, itemKey, hasRecipe, true);
 
         customItems.add(cItem);
 
@@ -194,7 +188,7 @@ public class ItemManager {
     private ItemBuilder createBuilder(ConfigurationSection section, String name) {
 
         ItemBuilder builder = new ItemBuilder().toItemBuilder(section)
-                .withPDCString(plugin.WYVENKEY, name)
+                .withPDCString(plugin.getKey(), name)
                 .withItemFlag(
                         ItemFlag.HIDE_UNBREAKABLE,
                         ItemFlag.HIDE_ATTRIBUTES,
@@ -230,40 +224,40 @@ public class ItemManager {
         return builder;
     }
 
-    public void unlockRecipe(Player p, com.wyvencraft.wyvencore.customitems.Item item) {
-        PlayerStats ps = plugin.getStatsManager().getPlayerStats(p.getUniqueId());
+    public void unlockRecipe(Player p, Item item) {
+        WyvenPlayer wp = plugin.getStatsManager().getPlayer(p.getUniqueId());
 
-        if (ps.hasUnlockedRecipe(item.getRecipe())) {
+        if (wp.hasUnlockedRecipe(item.getRecipe())) {
             p.sendMessage(Methods.capitalizeWord(item.getName()) + " recipes have already been unlocked");
             return;
         }
 
-        ps.unlockRecipe(item.getRecipe());
+        wp.unlockRecipe(item.getRecipe());
         p.sendMessage("you have unlocked a new recipe for " + Methods.capitalizeWord(item.getName()));
     }
 
-    public void lockRecipe(Player p, com.wyvencraft.wyvencore.customitems.Item item) {
-        PlayerStats ps = plugin.getStatsManager().getPlayerStats(p.getUniqueId());
+    public void lockRecipe(Player p, Item item) {
+        WyvenPlayer wp = plugin.getStatsManager().getPlayer(p.getUniqueId());
 
-        if (!ps.hasUnlockedRecipe(item.getRecipe())) {
+        if (!wp.hasUnlockedRecipe(item.getRecipe())) {
             p.sendMessage("You havent unlocked " + Methods.capitalizeWord(item.getName()));
             return;
         }
 
-        ps.lockRecipe(item.getRecipe());
+        wp.lockRecipe(item.getRecipe());
         p.sendMessage("you no longer have access to " + Methods.capitalizeWord(item.getName()) + " recipe");
 
     }
 
     public void giveSet(Player p, ArmorSet set) {
         for (int i = 0; i < set.getPieces().size(); i++) {
-            com.wyvencraft.wyvencore.customitems.Item piece = getArmorPiece(set.getPieces().get(i)).getItem();
+            Item piece = getArmorPiece(set.getPieces().get(i)).getItem();
 
             giveItem(p, piece, 1);
         }
     }
 
-    public void giveItem(Player p, com.wyvencraft.wyvencore.customitems.Item item, int amount) {
+    public void giveItem(Player p, Item item, int amount) {
 
         ItemStack[] stacks = new ItemStack[amount];
 
@@ -274,7 +268,7 @@ public class ItemManager {
         Methods.addItemsToPlayer(p, p.getLocation(), stacks);
     }
 
-    public com.wyvencraft.wyvencore.customitems.Item getCustomItem(String name) {
+    public Item getCustomItem(String name) {
         for (Item item : customItems) {
             if (item.getName().equalsIgnoreCase(name)) {
                 return item;

@@ -1,12 +1,11 @@
 package com.wyvencraft.items.commands;
 
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.commands.Permission;
-import com.wyvencraft.wyvencore.common.Lang;
-import com.wyvencraft.wyvencore.configuration.Message;
-import com.wyvencraft.wyvencore.customitems.ArmorSet;
-import com.wyvencraft.wyvencore.customitems.Item;
-import com.wyvencraft.wyvencore.utils.Methods;
+import com.wyvencraft.commands.Permission;
+import com.wyvencraft.common.Lang;
+import com.wyvencraft.configuration.Message;
+import com.wyvencraft.items.ArmorSet;
+import com.wyvencraft.utils.Methods;
+import org.apache.logging.log4j.core.Core;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

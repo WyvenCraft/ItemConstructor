@@ -1,7 +1,43 @@
 package com.wyvencraft.items;
 
-public class WyvenItem {
-/*
+import com.wyvencraft.addons.Addon;
+import com.wyvencraft.interfaces.IWyvenCore;
+
+public class WyvenItems extends Addon {
+
+    private final ItemManager itemManager;
+
+    public WyvenItems(IWyvenCore _plugin) {
+        super(_plugin);
+        itemManager = new ItemManager(this);
+    }
+
+    @Override
+    public void onLoad() {
+
+    }
+
+    @Override
+    public void onEnable() {
+
+    }
+
+    @Override
+    public void onDisable() {
+
+    }
+
+    @Override
+    public void reloadConfig() {
+
+    }
+
+    public ItemManager getItemManager() {
+        return itemManager;
+    }
+
+
+    /*
     public static void fullSetBonus(PlayerStats ps, ArmorSet set, boolean debuff) {
         for (String line : set.getFullsetActions()) {
             String[] action = line.split("] ", 2);

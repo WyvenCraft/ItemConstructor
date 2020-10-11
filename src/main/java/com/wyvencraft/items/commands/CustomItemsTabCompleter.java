@@ -1,9 +1,10 @@
 package com.wyvencraft.items.commands;
 
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.commands.Permission;
-import com.wyvencraft.wyvencore.customitems.Item;
-import com.wyvencraft.wyvencore.customitems.recipes.Recipe;
+import com.wyvencraft.commands.Permission;
+import com.wyvencraft.interfaces.IWyvenCore;
+import com.wyvencraft.items.Item;
+import com.wyvencraft.items.WyvenItems;
+import com.wyvencraft.items.recipes.Recipe;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,10 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CustomItemsTabCompleter implements TabCompleter {
-    private final Core plugin = Core.instance;
     List<String> arguments = new ArrayList<>();
     List<String> items = new ArrayList<>();
     List<String> recipes = new ArrayList<>();
+
+    WyvenItems addon;
+    IWyvenCore plugin;
+    public CustomItemsTabCompleter(WyvenItems addon) {
+        this.addon = addon;
+        plugin = addon.getPlugin();
+    }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String alias, String[] args) {
@@ -31,7 +38,7 @@ public class CustomItemsTabCompleter implements TabCompleter {
         }
 
         if (items.isEmpty()) {
-            for (Item item : plugin.getItemManager().customItems) {
+            for (Item item : addon.getItemManager().customItems) {
                 items.add(item.getName());
             }
         }
