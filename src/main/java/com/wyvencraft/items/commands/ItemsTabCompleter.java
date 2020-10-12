@@ -15,14 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomItemsTabCompleter implements TabCompleter {
+public class ItemsTabCompleter implements TabCompleter {
     List<String> arguments = new ArrayList<>();
     List<String> items = new ArrayList<>();
     List<String> recipes = new ArrayList<>();
 
     WyvenItems addon;
     IWyvenCore plugin;
-    public CustomItemsTabCompleter(WyvenItems addon) {
+    public ItemsTabCompleter(WyvenItems addon) {
         this.addon = addon;
         plugin = addon.getPlugin();
     }
