@@ -1,13 +1,16 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.wyvencore.customitems.Item;
+
+import org.bukkit.attribute.Attribute;
+
+import java.util.Map;
 
 public class ArmorPiece {
 
-    private final com.wyvencraft.wyvencore.customitems.Item item;
+    private final Item item;
     private final Map<Attribute, Double> bonusAttributes;
 
-    public ArmorPiece(com.wyvencraft.wyvencore.customitems.Item item, Map<Attribute, Double> bonusAttributes) {
+    public ArmorPiece(Item item, Map<Attribute, Double> bonusAttributes) {
         this.item = item;
         this.bonusAttributes = bonusAttributes;
     }

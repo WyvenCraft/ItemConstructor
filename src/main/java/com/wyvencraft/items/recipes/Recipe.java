@@ -1,10 +1,8 @@
 package com.wyvencraft.items.recipes;
 
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.customitems.Item;
-import com.wyvencraft.wyvencore.customitems.ItemManager;
-import com.wyvencraft.wyvencore.utils.Debug;
-import com.wyvencraft.wyvencore.utils.Methods;
+
+import com.wyvencraft.items.Item;
+import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -17,9 +15,8 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Recipe {
-    private static final Core plugin = Core.instance;
-    private static final FileConfiguration config = plugin.getConfig("items");
-    public static final Map<ItemStack, com.wyvencraft.wyvencore.customitems.recipes.Recipe> customRecipes = new HashMap<>();
+    private static final FileConfiguration config = WyvenItems.instance.getConfig("items.yml");
+    public static final Map<ItemStack, Recipe> customRecipes = new HashMap<>();
 
     public int id;
     public boolean vanilla;

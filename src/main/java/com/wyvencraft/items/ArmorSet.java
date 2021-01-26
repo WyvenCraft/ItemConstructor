@@ -1,10 +1,10 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.wyvencore.Core;
-import com.wyvencraft.wyvencore.common.PDCItem;
-import org.bukkit.Material;
+import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.List;
 
@@ -12,25 +12,25 @@ public class ArmorSet {
 
     private final String id;
     private final List<String> pieces;
-    private final List<String> fullsetActions;
+    private final List<String> fullSetActions;
 
-    public ArmorSet(String id, List<String> pieces, List<String> fullsetActions) {
+    public ArmorSet(String id, List<String> pieces, List<String> fullSetActions) {
         this.id = id;
         this.pieces = pieces;
-        this.fullsetActions = fullsetActions;
+        this.fullSetActions = fullSetActions;
     }
 
-    public boolean isWearing(Player player) {
+    public boolean hasFullSet(Player player) {
         if (getPieces().size() > player.getInventory().getArmorContents().length) return false;
 
         int wearingPieces = 0;
-        for (String setPiece : getPieces()) {
-            for (int i = 0; i < player.getInventory().getArmorContents().length; i++) {
-                ItemStack piece = player.getInventory().getArmorContents()[i];
-                if (piece == null || piece.getType() == Material.AIR) return false;
-                PDCItem pdc1 = new PDCItem(piece);
-                if (pdc1.getPDCString(Core.instance.WYVENKEY).equalsIgnoreCase(setPiece)) wearingPieces++;
-            }
+        for (ItemStack armorPiece : player.getInventory().getArmorContents()) {
+
+            PersistentDataContainer pdc = ItemStackBuilder.from(armorPiece).meta().getPersistentDataContainer();
+            if (!pdc.has(WyvenItems.getItemKey(), PersistentDataType.STRING)) continue;
+            String piece = pdc.get(WyvenItems.getItemKey(), PersistentDataType.STRING);
+
+            for (String setPiece : getPieces()) if (setPiece.equals(piece)) wearingPieces++;
         }
 
         return wearingPieces == getPieces().size();
@@ -44,7 +44,7 @@ public class ArmorSet {
         return pieces;
     }
 
-    public List<String> getFullsetActions() {
-        return fullsetActions;
+    public List<String> getFullSetActions() {
+        return fullSetActions;
     }
 }

@@ -60,21 +60,21 @@
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>WyvenCore-mvn-repo</id>
-            <url>https://github.com/WyvenCraft/WyvenCore/raw/mvn-repo</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.wyvencraft</groupId>
-            <artifactId>WyvenCore</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.github.wyvencraft</groupId>
+            <artifactId>WyvenAPI</artifactId>
+            <version>1.0.11</version>
         </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.16.3-R0.1-SNAPSHOT</version>
+            <artifactId>paper-api</artifactId>
+            <version>1.16.5-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

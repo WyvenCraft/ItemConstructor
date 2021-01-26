@@ -1,17 +1,12 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.common.ItemBuilder;
-import com.wyvencraft.common.PDCItem;
-import com.wyvencraft.interfaces.IWyvenCore;
+
+import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.items.Dummy;
 import com.wyvencraft.items.items.GrapplingHook;
-import com.wyvencraft.items.items.StaticItem;
 import com.wyvencraft.items.recipes.Recipe;
-import com.wyvencraft.player.PlayerStats;
-import com.wyvencraft.player.WyvenPlayer;
-import com.wyvencraft.utils.Debug;
-import com.wyvencraft.utils.Methods;
-import org.bukkit.Material;
+import com.wyvencraft.items.utils.Debug;
+import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -19,21 +14,30 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemManager {
-    private WyvenItems addon;
-    private final IWyvenCore plugin;
+    private final WyvenItems addon;
+    private final WyvenAPI plugin;
+
+    private final NamespacedKey HELMETKEY;
+
+    public List<Item> customItems = new ArrayList<>();
+    public List<ArmorSet> armorSets = new ArrayList<>();
+    public List<ArmorPiece> armorPieces = new ArrayList<>();
 
     public ItemManager(WyvenItems addon) {
         this.addon = addon;
         this.plugin = addon.getPlugin();
 
-        headwearableKey = new NamespacedKey(plugin.getPlugin(), "helmet");
+        HELMETKEY = new NamespacedKey(plugin.getPlugin(), "helmet");
 
         loadItems();
+
         new GrapplingHook();
         new Dummy();
 
@@ -42,18 +46,11 @@ public class ItemManager {
                 cItem.setRecipe(new Recipe(cItem, false));
             }
         }
-
-//        Bukkit.getPluginManager().registerEvents(new CraftingItemListener(), plugin);
     }
 
-    private final NamespacedKey headwearableKey;
-
-    public List<Item> customItems = new ArrayList<>();
-    public List<ArmorSet> armorSets = new ArrayList<>();
-    public List<ArmorPiece> armorPieces = new ArrayList<>();
 
     public void loadItems() {
-        FileConfiguration itemsFile = plugin.getConfig("items");
+        FileConfiguration itemsFile = plugin.getConfig("items.yml");
         ConfigurationSection itemsSection = itemsFile.getConfigurationSection("ITEMS");
 
         customItems.clear();
@@ -97,22 +94,11 @@ public class ItemManager {
                     continue;
                 }
 
-                NamespacedKey itemKey = new NamespacedKey(plugin, name);
+                NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name);
 
                 Item cItem = new Item(name, stack, itemKey, hasRecipe, false);
 
                 customItems.add(cItem);
-
-//                if (isWearable(stack)) {
-//                    Map<Attribute, Double> bonusAttributes = new HashMap<>();
-//                    for (Attribute attribute : Attribute.values()) {
-//                        if (itemsSection.get(name + "." + attribute.name().toLowerCase()) != null) {
-//                            bonusAttributes.put(attribute, (double) itemsSection.getInt(name + "." + attribute.name().toLowerCase()));
-//                        }
-//                    }
-//
-//                    armorPieces.add(new ArmorPiece(cItem, bonusAttributes));
-//                }
             }
         }
 
@@ -137,67 +123,12 @@ public class ItemManager {
         }
     }
 
-    public ItemStack loadStaticItem(StaticItem item) {
-        final String path = "STATIC_ITEMS." + item.name();
+    private ItemStackBuilder createBuilder(ConfigurationSection section, String name) {
 
-        ConfigurationSection section = plugin.getConfig("items").getConfigurationSection(path + ".item");
+        ItemStackBuilder builder = ItemStackBuilder.from()
+                .meta().getPersistentDataContainer().set(WyvenItems.getItemKey(), PersistentDataType.STRING, name);
 
-        if (section == null) {
-            plugin.getLogger().severe("Could not find an item at: " + path);
-            return null;
-        }
-
-        ItemBuilder builder;
-        if (item == StaticItem.GRAPPLINGHOOK) {
-            builder = new ItemBuilder().toItemBuilder(section, Material.FISHING_ROD);
-//                    .withPDCLong(GrapplingHook.cooldown, 0);
-
-        } else if (item == StaticItem.DUMMY) {
-            builder = new ItemBuilder().toItemBuilder(section, Material.ARMOR_STAND);
-        } else {
-            throw new IllegalStateException("Unexpected value: " + item);
-        }
-
-        ItemStack stack = builder
-                .withPDCString(plugin.getKey(), item.name())
-                .withItemFlag(
-                        ItemFlag.HIDE_UNBREAKABLE,
-                        ItemFlag.HIDE_ATTRIBUTES,
-                        ItemFlag.HIDE_ENCHANTS,
-                        ItemFlag.HIDE_DESTROYS,
-                        ItemFlag.HIDE_PLACED_ON,
-                        ItemFlag.HIDE_POTION_EFFECTS).withUnbreakable(true)
-                .build();
-
-        NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), item.name());
-
-        boolean hasRecipe = false;
-        if (section.get(item.name() + ".recipe-enabled") != null) {
-            hasRecipe = section.getBoolean(item.name() + ".recipe-enabled");
-        }
-
-        Item cItem = new Item(item.name(), stack, itemKey, hasRecipe, true);
-
-        customItems.add(cItem);
-
-        Debug.log("successfully loaded " + item.name());
-
-        return stack;
-    }
-
-    private ItemBuilder createBuilder(ConfigurationSection section, String name) {
-
-        ItemBuilder builder = new ItemBuilder().toItemBuilder(section)
-                .withPDCString(plugin.getKey(), name)
-                .withItemFlag(
-                        ItemFlag.HIDE_UNBREAKABLE,
-                        ItemFlag.HIDE_ATTRIBUTES,
-                        ItemFlag.HIDE_ENCHANTS,
-                        ItemFlag.HIDE_DESTROYS,
-                        ItemFlag.HIDE_PLACED_ON,
-                        ItemFlag.HIDE_POTION_EFFECTS);
-
-        for (int i = 0; i < builder.getLore().size(); i++) {
+        for (int i = 0; i < builder.meta().getLore().size(); i++) {
             String line = builder.getLore().get(i);
 
 //            if (line.contains("{bonus:")) {
@@ -225,56 +156,50 @@ public class ItemManager {
     }
 
     public void unlockRecipe(Player p, Item item) {
-        WyvenPlayer wp = plugin.getStatsManager().getPlayer(p.getUniqueId());
-
-        if (wp.hasUnlockedRecipe(item.getRecipe())) {
-            p.sendMessage(Methods.capitalizeWord(item.getName()) + " recipes have already been unlocked");
+        if (p.hasDiscoveredRecipe(item.getKey())) {
+            p.sendMessage(item.getName() + " recipes have already been unlocked");
             return;
         }
 
-        wp.unlockRecipe(item.getRecipe());
-        p.sendMessage("you have unlocked a new recipe for " + Methods.capitalizeWord(item.getName()));
+        p.discoverRecipe(item.getKey());
+
+        p.sendMessage("you have unlocked a new recipe for " + item.getName());
     }
 
     public void lockRecipe(Player p, Item item) {
-        WyvenPlayer wp = plugin.getStatsManager().getPlayer(p.getUniqueId());
-
-        if (!wp.hasUnlockedRecipe(item.getRecipe())) {
-            p.sendMessage("You havent unlocked " + Methods.capitalizeWord(item.getName()));
+        if (!p.hasDiscoveredRecipe(item.getKey())) {
+            p.sendMessage("You havent unlocked " + item.getName());
             return;
         }
 
-        wp.lockRecipe(item.getRecipe());
-        p.sendMessage("you no longer have access to " + Methods.capitalizeWord(item.getName()) + " recipe");
+        p.undiscoverRecipe(item.getKey());
+        p.sendMessage("you no longer have access to " + item.getName() + " recipe");
 
     }
 
     public void giveSet(Player p, ArmorSet set) {
-        for (int i = 0; i < set.getPieces().size(); i++) {
-            Item piece = getArmorPiece(set.getPieces().get(i)).getItem();
+        for (String armorPiece : set.getPieces()) {
+            Item piece = getArmorPiece(armorPiece).getItem();
 
             giveItem(p, piece, 1);
         }
     }
 
     public void giveItem(Player p, Item item, int amount) {
-
         ItemStack[] stacks = new ItemStack[amount];
 
         for (int i = 0; i < amount; i++) {
             stacks[i] = item.getItem();
         }
 
-        Methods.addItemsToPlayer(p, p.getLocation(), stacks);
+        //Methods.addItemsToPlayer(p, p.getLocation(), stacks);
     }
 
     public Item getCustomItem(String name) {
-        for (Item item : customItems) {
-            if (item.getName().equalsIgnoreCase(name)) {
-                return item;
-            }
-        }
-        return null;
+        return customItems.stream()
+                .filter(item -> item.getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public ArmorPiece getArmorPiece(ItemStack stack) {
@@ -305,8 +230,10 @@ public class ItemManager {
 
     public boolean isWearable(final ItemStack itemStack) {
         String type = itemStack.getType().name();
-        PDCItem pdc = new PDCItem(itemStack);
-        if (pdc.hasKey(headwearableKey)) return true;
+
+        PersistentDataContainer pdc = ItemStackBuilder.from(itemStack).meta().getPersistentDataContainer();
+
+        if (pdc.has(HELMETKEY, PersistentDataType.STRING)) return true;
         else if (type.endsWith("_CHESTPLATE") || type.endsWith("ELYTRA")) return true;
         else if (type.endsWith("_LEGGINGS")) return true;
         else return type.endsWith("_BOOTS");

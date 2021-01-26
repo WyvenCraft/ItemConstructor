@@ -1,7 +1,7 @@
 package com.wyvencraft.items.commands;
 
-import com.wyvencraft.commands.Permission;
-import com.wyvencraft.interfaces.IWyvenCore;
+
+import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.Item;
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.recipes.Recipe;
@@ -21,7 +21,7 @@ public class ItemsTabCompleter implements TabCompleter {
     List<String> recipes = new ArrayList<>();
 
     WyvenItems addon;
-    IWyvenCore plugin;
+    WyvenAPI plugin;
     public ItemsTabCompleter(WyvenItems addon) {
         this.addon = addon;
         plugin = addon.getPlugin();
@@ -50,7 +50,7 @@ public class ItemsTabCompleter implements TabCompleter {
         }
 
         if (args.length == 1) {
-            if (sender.hasPermission(Permission.CUSTOMITEMS_HELP.getPerm())) {
+            if (sender.hasPermission("wyvencore.items.help")) {
                 List<String> result = new ArrayList<>();
                 for (String a : arguments) {
                     if (a.toLowerCase().startsWith(args[0].toLowerCase())) {
@@ -64,7 +64,7 @@ public class ItemsTabCompleter implements TabCompleter {
         switch (args[0].toLowerCase()) {
             // /customitems give(0) <item>(1) [player](2) [amount](3)
             case "give":
-                if (sender.hasPermission(Permission.CUSTOMITEMS_GIVE.getPerm())) {
+                if (sender.hasPermission("wyvencore.items.give")) {
                     if (args.length == 2) {
                         List<String> result = new ArrayList<>();
                         for (String a : items) {
@@ -99,7 +99,7 @@ public class ItemsTabCompleter implements TabCompleter {
                 break;
             // /customitems unlock(0) <recipe>(1) [player](2)
             case "unlock":
-                if (sender.hasPermission(Permission.CUSTOMITEMS_UNLOCK.getPerm())) {
+                if (sender.hasPermission("wyvencore.items.unlockrecipe")) {
                     if (args.length == 2) {
                         List<String> result = new ArrayList<>();
                         for (String a : recipes) {
@@ -122,7 +122,7 @@ public class ItemsTabCompleter implements TabCompleter {
                 }
                 break;
             case "lock":
-                if (sender.hasPermission(Permission.CUSTOMITEMS_LOCK.getPerm())) {
+                if (sender.hasPermission("wyvencore.items.lockrecipe")) {
                     if (args.length == 2) {
                         List<String> result = new ArrayList<>();
                         for (String a : recipes) {

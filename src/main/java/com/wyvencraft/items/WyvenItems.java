@@ -1,25 +1,41 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.addons.Addon;
-import com.wyvencraft.interfaces.IWyvenCore;
+import com.wyvencraft.api.addon.Addon;
+import com.wyvencraft.api.integration.WyvenAPI;
+import com.wyvencraft.items.commands.ItemsCMD;
+import com.wyvencraft.items.commands.ItemsTabCompleter;
+import org.bukkit.NamespacedKey;
 
 public class WyvenItems extends Addon {
 
+    public static WyvenItems instance;
     private final ItemManager itemManager;
 
-    public WyvenItems(IWyvenCore _plugin) {
-        super(_plugin);
+    private static NamespacedKey WYVENITEM;
+
+    public static NamespacedKey getItemKey() {
+        return WYVENITEM;
+    }
+
+    public WyvenItems(WyvenAPI plugin) {
+        super(plugin);
+        instance = this;
+        WYVENITEM = new NamespacedKey(this.getPlugin().getPlugin(), "wyvenitems");
         itemManager = new ItemManager(this);
     }
 
     @Override
     public void onLoad() {
+        saveDefaultConfig("items.yml");
+        saveDefaultConfig("items_lang.yml");
 
+        itemManager.loadItems();
     }
 
     @Override
     public void onEnable() {
-
+        ItemsCMD cmd = new ItemsCMD(this);
+        getPlugin().registerCommand("customitem", cmd, new ItemsTabCompleter(this), "", "");
     }
 
     @Override
@@ -29,7 +45,8 @@ public class WyvenItems extends Addon {
 
     @Override
     public void reloadConfig() {
-
+        reloadConfig("items.yml");
+        reloadConfig("items_lang.yml");
     }
 
     public ItemManager getItemManager() {
