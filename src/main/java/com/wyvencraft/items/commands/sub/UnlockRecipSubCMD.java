@@ -1,7 +1,6 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.Item;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
@@ -10,14 +9,12 @@ import org.bukkit.entity.Player;
 
 public class UnlockRecipSubCMD extends SubCommand {
     private final WyvenItems addon;
-    private final WyvenAPI plugin;
 
-    public UnlockRecipSubCMD(WyvenAPI plugin, WyvenItems addon, String name, String permission, int minArgs) {
-        super(plugin, name, permission, minArgs);
+    public UnlockRecipSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
+        super(addon.getPlugin(), name, permission, minArgs);
         this.addon = addon;
-        this.plugin = plugin;
     }
-    
+
     // /customitem unlock <recipe> [player]
 
     @Override
@@ -26,7 +23,7 @@ public class UnlockRecipSubCMD extends SubCommand {
         Item item;
         if (args.length == 2) {
             if (addon.getItemManager().getCustomItem(args[1]) == null) {
-                plugin.getLangManager().sendMessage(sender, "items.invalid_item");
+                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[1]));
                 return;
             }
 
@@ -35,13 +32,13 @@ public class UnlockRecipSubCMD extends SubCommand {
             if (sender instanceof Player)
                 target = (Player) sender;
             else {
-                sender.sendMessage("Please specify player after <recipe>");
+                getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "NULL"));
                 return;
             }
 
         } else if (args.length == 3) {
             if (addon.getItemManager().getCustomItem(args[1]) == null) {
-                plugin.getLangManager().sendMessage(sender, "items.invalid_item");
+                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[1]));
                 return;
             }
 
@@ -55,7 +52,7 @@ public class UnlockRecipSubCMD extends SubCommand {
         }
 
         if (!item.isHasRecipe()) {
-            sender.sendMessage("This item dont have a recipe attached");
+            getPlugin().getLangManager().sendMessage(sender, "ITEMS.NO_RECIPE", r -> r.replace("{0}", args[1]));
             return;
         }
 
@@ -63,7 +60,6 @@ public class UnlockRecipSubCMD extends SubCommand {
         if (!target.hasDiscoveredRecipe(item.getKey()))
             addon.getItemManager().unlockRecipe(target, item);
         else
-            sender.sendMessage(target.getName() + " has already unlocked this recipe");
-
+            getPlugin().getLangManager().sendMessage(target, "ITEMS.ALREADY_UNLOCKED", r -> r.replace("{0}", target.getName()).replace("{1}", args[1]));
     }
 }

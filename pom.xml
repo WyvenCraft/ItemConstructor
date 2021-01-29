@@ -7,8 +7,9 @@
     <groupId>com.wyvencraft</groupId>
     <artifactId>WyvenItems</artifactId>
     <version>1.0.0</version>
-    <name>WyvenItemsAddon</name>
+    <name>WyvenItems</name>
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <finalName>${project.name}</finalName>
         <resources>
             <resource>
@@ -30,9 +31,8 @@
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <outputDirectory>/Users/Gustav/Desktop/wyvencraft/plugins/wyvencore/addons</outputDirectory>
-                    <!--                    <outputDirectory>/Users/Gustav/Desktop/Test server/plugins</outputDirectory>-->
-                    <!--                    <outputDirectory>/Users/gustavhaavik/Desktop</outputDirectory>-->
+                    <outputDirectory>C:\Users\gkhaa\OneDrive\Skrivebord\testserver\plugins\WyvenCore\addons
+                    </outputDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -40,7 +40,11 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.4</version>
                 <configuration>
-                    <!-- put your configurations here -->
+                    <artifactSet>
+                        <includes>
+                            <include>com.github.wyvencraft:WyvenAPI</include>
+                        </includes>
+                    </artifactSet>
                 </configuration>
                 <executions>
                     <execution>
@@ -56,20 +60,25 @@
 
     <repositories>
         <repository>
-            <id>papermc</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
     </repositories>
 
     <dependencies>
+        <!--        <dependency>-->
+        <!--            <groupId>com.github.wyvencraft</groupId>-->
+        <!--            <artifactId>WyvenAPI</artifactId>-->
+        <!--            <version>1.0.14</version>-->
+        <!--        </dependency>-->
         <dependency>
-            <groupId>com.github.wyvencraft</groupId>
+            <groupId>com.wyvencraft</groupId>
             <artifactId>WyvenAPI</artifactId>
-            <version>1.0.11</version>
+            <version>1.0.0</version>
         </dependency>
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>

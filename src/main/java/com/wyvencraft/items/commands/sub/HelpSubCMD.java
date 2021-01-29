@@ -1,22 +1,22 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.integration.WyvenAPI;
+import com.wyvencraft.api.managers.ILangManager;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.command.CommandSender;
 
-public class HelpSubCMD extends SubCommand {
-    private final WyvenItems addon;
-    private final WyvenAPI plugin;
+import java.util.regex.Pattern;
 
-    public HelpSubCMD(WyvenAPI plugin, WyvenItems addon, String name, String permission, int minArgs) {
-        super(plugin, name, permission, minArgs);
-        this.addon = addon;
-        this.plugin = plugin;
+public class HelpSubCMD extends SubCommand {
+    public HelpSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
+        super(addon.getPlugin(), name, permission, minArgs);
     }
 
     @Override
     protected void handleCommand(CommandSender sender, String[] strings) {
-        plugin.getLangManager().sendMessage(sender, "help");
+        final ILangManager lang = getPlugin().getLangManager();
+        final String helpMessage = lang.getMessage("ITEMS.HELP");
+        String[] message = helpMessage.split(Pattern.quote("\n"));
+        lang.sendMessage(sender, message);
     }
 }

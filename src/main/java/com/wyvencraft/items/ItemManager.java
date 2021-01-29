@@ -2,23 +2,25 @@ package com.wyvencraft.items;
 
 
 import com.wyvencraft.api.integration.WyvenAPI;
-import com.wyvencraft.items.items.Dummy;
-import com.wyvencraft.items.items.GrapplingHook;
-import com.wyvencraft.items.recipes.Recipe;
-import com.wyvencraft.items.utils.Debug;
+import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
+import org.apache.commons.lang.WordUtils;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Stream;
 
 public class ItemManager {
     private final WyvenItems addon;
@@ -35,22 +37,11 @@ public class ItemManager {
         this.plugin = addon.getPlugin();
 
         HELMETKEY = new NamespacedKey(plugin.getPlugin(), "helmet");
-
-        loadItems();
-
-        new GrapplingHook();
-        new Dummy();
-
-        for (Item cItem : customItems) {
-            if (cItem.isHasRecipe()) {
-                cItem.setRecipe(new Recipe(cItem, false));
-            }
-        }
     }
 
 
     public void loadItems() {
-        FileConfiguration itemsFile = plugin.getConfig("items.yml");
+        FileConfiguration itemsFile = addon.getConfig("items.yml");
         ConfigurationSection itemsSection = itemsFile.getConfigurationSection("ITEMS");
 
         customItems.clear();
@@ -61,44 +52,59 @@ public class ItemManager {
             for (String name : itemsSection.getKeys(false)) {
                 ConfigurationSection itemSection = itemsSection.getConfigurationSection(name + ".item");
 
-                ItemBuilder builder = createBuilder(itemSection, name);
+                ItemStackBuilder builder = getBuilder(itemSection);
 
-                if (name.endsWith("_HELMET")) builder.withPDCBoolean(headwearableKey, true);
+                // Setup attributes
+                ConfigurationSection statsSection = itemsSection.getConfigurationSection(name + ".stats");
+                if (statsSection != null) {
+                    List<String> statsLoreSection = new ArrayList<>();
 
-                if (itemSection.getConfigurationSection("enchants") != null) {
-                    ConfigurationSection enchSection = itemSection.getConfigurationSection("enchants");
-                    for (String ench : enchSection.getKeys(false)) {
-                        Enchantment enchantment = Enchant.getEnchantment(ench);
-                        if (enchantment != null) {
-                            builder.withEnchantment(enchantment, enchSection.getInt(ench));
-                        } else {
-                            Debug.log("couldn't find an enchantment named " + ench);
+                    final String equipSlotStr = name.toUpperCase();
+
+                    final EquipmentSlot slot;
+
+                    if (equipSlotStr.endsWith("_HELMET")) slot = EquipmentSlot.HEAD;
+                    else if (equipSlotStr.endsWith("_CHESTPLATE")) slot = EquipmentSlot.CHEST;
+                    else if (equipSlotStr.endsWith("_LEGGINGS")) slot = EquipmentSlot.LEGS;
+                    else if (equipSlotStr.endsWith("_BOOTS")) slot = EquipmentSlot.FEET;
+                    else slot = null;
+
+                    for (String attrName : statsSection.getKeys(false)) {
+                        Attribute attribute;
+                        try {
+                            attribute = Attribute.valueOf("GENERIC_" + attrName.toUpperCase());
+                        } catch (IllegalArgumentException e) {
+                            plugin.getLogger().warning(attrName + " is not a valid attribute");
+                            continue;
                         }
+
+                        final int amount = statsSection.getInt(attrName);
+                        final double multiplier = (double) amount / 100;
+                        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), attrName, multiplier, AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot);
+
+                        StringBuilder stat = new StringBuilder("&7" + WordUtils.capitalizeFully(attrName.replaceAll("_", " ")) + ": ");
+                        if (amount >= 0) stat.append("&a+");
+                        else stat.append("&c");
+                        stat.append(amount).append('%');
+                        statsLoreSection.add(stat.toString());
+
+                        builder.addAttributeModifier(attribute, modifier);
+                    }
+
+                    if (!statsLoreSection.isEmpty()) {
+                        List<String> oldLore = Optional.ofNullable(builder.meta().getLore()).orElse(new ArrayList<>());
+                        statsLoreSection.addAll(oldLore);
+
+                        builder.lore(statsLoreSection, true);
                     }
                 }
 
-                if (itemSection.getString("material").startsWith("LEATHER_")) {
-                    if (itemSection.get("color") != null) {
-                        builder.withColor(itemSection.getString("color"));
-                    }
-                }
+                // JUST FOR NOW
+                final boolean hasRecipe = false;
 
-                boolean hasRecipe = false;
-                if (itemsSection.get(name + ".recipe-enabled") != null) {
-                    hasRecipe = itemsSection.getBoolean(name + ".recipe-enabled");
-                }
+                final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
 
-                ItemStack stack = builder.build();
-                if (stack == null) {
-                    Debug.log("Skipping " + name + " couldnt load item.");
-                    continue;
-                }
-
-                NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name);
-
-                Item cItem = new Item(name, stack, itemKey, hasRecipe, false);
-
-                customItems.add(cItem);
+                customItems.add(new Item(name, builder.itemStack(), itemKey, hasRecipe));
             }
         }
 
@@ -123,34 +129,37 @@ public class ItemManager {
         }
     }
 
-    private ItemStackBuilder createBuilder(ConfigurationSection section, String name) {
+    public ItemStackBuilder getBuilder(ConfigurationSection section) {
+        if (section == null) return null;
 
-        ItemStackBuilder builder = ItemStackBuilder.from()
-                .meta().getPersistentDataContainer().set(WyvenItems.getItemKey(), PersistentDataType.STRING, name);
-
-        for (int i = 0; i < builder.meta().getLore().size(); i++) {
-            String line = builder.getLore().get(i);
-
-//            if (line.contains("{bonus:")) {
-//                String ability = line.substring(7, line.length() - 1);
-//                if (plugin.getAbility(ability) == null) {
-//                    plugin.getLogger().severe("could not find ability: " + ability);
-//                    continue;
-//                }
-//                Ability bonusAbility = plugin.getAbility(ability);
-//
-//                builder.getLore().remove(line);
-//                List<String> bonusDesc = new ArrayList<String>() {{
-//                    //                        bonusLine = PlaceholderAPI.setPlaceholders((OfflinePlayer) p, bonusLine);
-//                    this.addAll(Arrays.asList(bonusAbility.getDescription()));
-//                }};
-//
-//                builder.getLore().addAll(i, bonusDesc);
-//            }
-
-            builder.getLore().set(i, line);
-
+        final Material material = Material.getMaterial(Objects.requireNonNull(section.getString("material", "null")));
+        if (material == null) {
+            plugin.getLogger().warning("Missing material: " + section.getName());
+            return null;
         }
+
+        ItemStackBuilder builder = ItemStackBuilder.from(material);
+
+        builder.flag(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE);
+
+        if (material.name().startsWith("LEATHER_")) {
+            if (section.contains("color")) {
+                final LeatherArmorMeta meta = (LeatherArmorMeta) builder.meta();
+                meta.setColor(Utils.hexToRgb(section.getString("color")));
+            }
+        }
+
+        final String name = section.getString("name", material.name());
+
+        if (name != null) builder.name(name, true);
+
+        if (section.contains("enchants")) {
+            builder.enchantments(String.valueOf(section.getStringList("enchants")));
+        }
+
+        final List<String> lore = section.getStringList("lore");
+
+        builder.lore(lore, true);
 
         return builder;
     }
@@ -174,7 +183,6 @@ public class ItemManager {
 
         p.undiscoverRecipe(item.getKey());
         p.sendMessage("you no longer have access to " + item.getName() + " recipe");
-
     }
 
     public void giveSet(Player p, ArmorSet set) {
@@ -192,7 +200,13 @@ public class ItemManager {
             stacks[i] = item.getItem();
         }
 
-        //Methods.addItemsToPlayer(p, p.getLocation(), stacks);
+        final Map<Integer, ItemStack> fallenItems = p.getInventory().addItem(
+                Stream.of(stacks).filter(Objects::nonNull).toArray(ItemStack[]::new));
+
+        /* If map is not empty, some items were not added... Let's drop them. */
+        if (!fallenItems.isEmpty()) {
+            fallenItems.values().forEach(stack -> p.getWorld().dropItemNaturally(p.getLocation(), stack));
+        }
     }
 
     public Item getCustomItem(String name) {
@@ -203,29 +217,31 @@ public class ItemManager {
     }
 
     public ArmorPiece getArmorPiece(ItemStack stack) {
-        for (ArmorPiece piece : armorPieces) {
-            if (piece.getItem().getItem().isSimilar(stack)) return piece;
-        }
-        return null;
+        return armorPieces.stream()
+                .filter(a -> a.getItem().getItem().isSimilar(stack))
+                .findFirst()
+                .orElse(null);
     }
 
     public ArmorPiece getArmorPiece(String name) {
-        for (ArmorPiece piece : armorPieces) {
-            if (piece.getItem().getKey().getKey().equals(name)) return piece;
-        }
-        return null;
+        return armorPieces.stream()
+                .filter(a -> a.getItem().getName().equalsIgnoreCase(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public ArmorSet getArmorSetFromID(String id) {
-        for (ArmorSet set : armorSets) if (set.getId().equals(id)) return set;
-        return null;
+        return armorSets.stream()
+                .filter(set -> set.getId().equalsIgnoreCase(id))
+                .findFirst()
+                .orElse(null);
     }
 
     public ArmorSet getArmorSet(String itemPiece) {
-        for (ArmorSet set : armorSets) {
-            if (set.getPieces().contains(itemPiece)) return set;
-        }
-        return null;
+        return armorSets.stream()
+                .filter(set -> set.getPieces().contains(itemPiece))
+                .findFirst()
+                .orElse(null);
     }
 
     public boolean isWearable(final ItemStack itemStack) {

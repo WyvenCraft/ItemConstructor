@@ -6,12 +6,11 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.github.wyvencraft:WyvenAPI:1.0.12" level="project" />
+    <orderEntry type="library" name="Maven: com.wyvencraft:WyvenAPI:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.portlek:BukkitItemBuilder:3.1" level="project" />
     <orderEntry type="library" name="Maven: io.github.portlek:bukkit-version:1.8" level="project" />
     <orderEntry type="library" name="Maven: com.github.cryptomorin:XSeries:7.5.3" level="project" />

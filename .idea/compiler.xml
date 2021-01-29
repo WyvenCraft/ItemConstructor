@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ItemConstructor" />
+        <module name="WyvenItems" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ItemConstructor" target="1.8" />
+      <module name="WyvenItems" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

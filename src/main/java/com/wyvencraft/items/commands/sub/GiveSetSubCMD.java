@@ -1,7 +1,6 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.ArmorSet;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
@@ -10,12 +9,10 @@ import org.bukkit.entity.Player;
 
 public class GiveSetSubCMD extends SubCommand {
     private final WyvenItems addon;
-    private final WyvenAPI plugin;
 
-    public GiveSetSubCMD(WyvenAPI plugin, WyvenItems addon, String name, String permission, int minArgs) {
-        super(plugin, name, permission, minArgs);
+    public GiveSetSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
+        super(addon.getPlugin(), name, permission, minArgs);
         this.addon = addon;
-        this.plugin = plugin;
     }
 
     // /customitems giveset <set> [player]
@@ -28,7 +25,7 @@ public class GiveSetSubCMD extends SubCommand {
 
         if (args.length == 2) {
             if (addon.getItemManager().getArmorSetFromID(args[1]) == null) {
-                plugin.getLangManager().sendMessage(sender, "items.invalid_armorset");
+                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[1]));
                 return;
             }
 
@@ -37,12 +34,12 @@ public class GiveSetSubCMD extends SubCommand {
             if (sender instanceof Player)
                 target = (Player) sender;
             else {
-                sender.sendMessage("Please specify player after <set>");
+                getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", args[1]));
                 return;
             }
         } else if (args.length == 3) {
             if (addon.getItemManager().getArmorSetFromID(args[1]) == null) {
-                plugin.getLangManager().sendMessage(sender, "items.invalid_armorset");
+                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[1]));
                 return;
             }
 

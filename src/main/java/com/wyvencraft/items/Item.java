@@ -1,8 +1,8 @@
 package com.wyvencraft.items;
 
-import com.wyvencraft.items.recipes.Recipe;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
 
 public class Item {
 
@@ -11,19 +11,13 @@ public class Item {
     private final NamespacedKey key;
     private Recipe recipe;
     private final boolean hasRecipe;
-    private final boolean isStatic;
 
-    public Item(String name, ItemStack item, NamespacedKey key, boolean hasRecipe, boolean isStatic) {
+    public Item(String name, ItemStack item, NamespacedKey key, boolean hasRecipe) {
         this.name = name;
         this.item = item;
         this.key = key;
         this.recipe = null;
         this.hasRecipe = hasRecipe;
-        this.isStatic = isStatic;
-    }
-
-    public boolean isStatic() {
-        return isStatic;
     }
 
     public boolean isHasRecipe() {

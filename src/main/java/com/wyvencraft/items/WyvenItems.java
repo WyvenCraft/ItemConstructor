@@ -10,6 +10,7 @@ public class WyvenItems extends Addon {
 
     public static WyvenItems instance;
     private final ItemManager itemManager;
+    private final Language language;
 
     private static NamespacedKey WYVENITEM;
 
@@ -22,12 +23,13 @@ public class WyvenItems extends Addon {
         instance = this;
         WYVENITEM = new NamespacedKey(this.getPlugin().getPlugin(), "wyvenitems");
         itemManager = new ItemManager(this);
+        this.language = new Language(this);
     }
 
     @Override
     public void onLoad() {
         saveDefaultConfig("items.yml");
-        saveDefaultConfig("items_lang.yml");
+        language.initLang();
 
         itemManager.loadItems();
     }
@@ -35,7 +37,8 @@ public class WyvenItems extends Addon {
     @Override
     public void onEnable() {
         ItemsCMD cmd = new ItemsCMD(this);
-        getPlugin().registerCommand("customitem", cmd, new ItemsTabCompleter(this), "", "");
+        getPlugin().registerCommand("wyvenitems", cmd, new ItemsTabCompleter(this), "Main command to accessing and giving custom items", "/wyvenitems <argument>", "witem", "witems", "wi");
+
     }
 
     @Override
@@ -46,7 +49,6 @@ public class WyvenItems extends Addon {
     @Override
     public void reloadConfig() {
         reloadConfig("items.yml");
-        reloadConfig("items_lang.yml");
     }
 
     public ItemManager getItemManager() {
