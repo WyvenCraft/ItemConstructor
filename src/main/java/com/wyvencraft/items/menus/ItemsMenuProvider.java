@@ -2,108 +2,102 @@ package com.wyvencraft.items.menus;
 
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.Item;
+import com.wyvencraft.items.enums.ItemType;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import io.github.portlek.smartinventory.*;
 import io.github.portlek.smartinventory.util.SlotPos;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class ItemsMenuProvider implements InventoryProvider {
 
-    private final ItemStack borderItem = ItemStackBuilder.from(Material.GRAY_STAINED_GLASS_PANE)
-            .name(" ")
-            .itemStack();
-    private final ItemStack helmetsItem = ItemStackBuilder.from(Material.DIAMOND_HELMET)
-            .name("&eHelmets", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack chestplatesItem = ItemStackBuilder.from(Material.DIAMOND_CHESTPLATE)
-            .name("&eChestplates", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack leggingsItem = ItemStackBuilder.from(Material.DIAMOND_LEGGINGS)
-            .name("&eLeggings", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack bootsItem = ItemStackBuilder.from(Material.DIAMOND_BOOTS)
-            .name("&eBoots", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack combatItem = ItemStackBuilder.from(Material.DIAMOND_SWORD)
-            .name("&eCombat", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack toolsItem = ItemStackBuilder.from(Material.DIAMOND_PICKAXE)
-            .name("&eTools", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack archeryItem = ItemStackBuilder.from(Material.BOW)
-            .name("&eLong Range", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack offHandItem = ItemStackBuilder.from(Material.TOTEM_OF_UNDYING)
-            .name("&eOff Hand", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack nextPage = ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON)
-            .name("&a&lNext Page >>", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
-    private final ItemStack previousPage = ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON)
-            .name("&c&l<< Previous Page", true)
-            .flag(ItemFlag.HIDE_ATTRIBUTES)
-            .itemStack();
+    public enum GuiItem {
+        BORDER_ITEM(ItemStackBuilder.from(Material.GRAY_STAINED_GLASS_PANE).name(" "), ItemType.NULL),
+        HELMET_ITEM(ItemStackBuilder.from(Material.DIAMOND_HELMET).name("&eHelmets", true), ItemType.HELMET, SlotPos.of(1, 1)),
+        CHESTPLATES_ITEM(ItemStackBuilder.from(Material.DIAMOND_CHESTPLATE).name("&eChestplates", true), ItemType.CHESTPLATE, SlotPos.of(2, 1)),
+        LEGGINGS_ITEM(ItemStackBuilder.from(Material.DIAMOND_LEGGINGS).name("&eLeggings", true), ItemType.LEGGING, SlotPos.of(3, 1)),
+        BOOTS_ITEM(ItemStackBuilder.from(Material.DIAMOND_BOOTS).name("&eBoots", true), ItemType.BOOTS, SlotPos.of(4, 1)),
+        COMBAT_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_SWORD).name("&eCombat", true), ItemType.COMBAT, SlotPos.of(1, 0)),
+        TOOL_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_PICKAXE).name("&eTools", true), ItemType.TOOL, SlotPos.of(2, 0)),
+        ARCHERY_ITEMS_ITEM(ItemStackBuilder.from(Material.BOW).name("&eLong", true), ItemType.ARCHERY, SlotPos.of(3, 0)),
+        OFFHAND_ITEMS_ITEM(ItemStackBuilder.from(Material.TOTEM_OF_UNDYING).name("&eOff Hand", true), ItemType.OFFHAND, SlotPos.of(4, 0)),
+        NEXT_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).name("&a&lNext Page >>", true), ItemType.NULL),
+        PREVIOUS_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).name("&c&l<< Previous Page", true), ItemType.NULL);
 
-    private final HashMap<UUID, SlotPos> category = new HashMap<>();
+        ItemStack stack;
+        SlotPos slotPos;
+        ItemType type;
+
+        GuiItem(ItemStackBuilder builder, ItemType type, SlotPos... slotPos) {
+            this.stack = builder.flag(ItemFlag.HIDE_ATTRIBUTES).itemStack();
+            Arrays.stream(slotPos).findFirst().ifPresent(s -> this.slotPos = s);
+            this.type = type;
+        }
+
+        public ItemStack getStack() {
+            return stack;
+        }
+
+        public SlotPos getSlotPos() {
+            return slotPos;
+        }
+
+        public Icon getIcon() {
+            return Icon.from(stack);
+        }
+    }
+
+    private final HashMap<UUID, SlotPos> selected = new HashMap<>();
 
     @Override
     public void init(@NotNull InventoryContents contents) {
-        contents.fill(Icon.cancel(borderItem));
+        contents.fill(Icon.cancel(GuiItem.BORDER_ITEM.getStack()));
         contents.fillSquare(SlotPos.of(1, 3), SlotPos.of(4, 7), Icon.EMPTY);
 
         final Pagination pagination = contents.pagination();
+        final Player player = contents.player();
 
-        List<Item> filteredItems = WyvenItems.instance.getItemManager().customItems;
+        AtomicReference<List<Item>> filteredItems = new AtomicReference<>(WyvenItems.instance.getItemManager().customItems);
 
-        contents.set(SlotPos.of(1, 0), Icon.click(combatItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(combatItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(2, 0), Icon.click(toolsItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(toolsItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(3, 0), Icon.click(archeryItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(archeryItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(4, 0), Icon.click(offHandItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(offHandItem).glow().itemStack());
-        }));
+        for (GuiItem category : GuiItem.values()) {
+            if (category.slotPos == null) continue;
 
-        contents.set(SlotPos.of(1, 1), Icon.click(helmetsItem, clickEvent -> {
-//            filteredItems.set(filteredItems.get().stream()
-//                    .filter(i -> i.getName().toUpperCase().endsWith("_HELMET"))
-//                    .collect(Collectors.toList()));
+            contents.set(category.getSlotPos(), category.getIcon().whenClick(e -> {
+                if (selected.containsKey(player.getUniqueId())) {
+                    // REMOVE GLOWING EFFECT
+                    init(contents);
+                }
 
-            clickEvent.icon().item(ItemStackBuilder.from(helmetsItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(2, 1), Icon.click(chestplatesItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(chestplatesItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(3, 1), Icon.click(leggingsItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(leggingsItem).glow().itemStack());
-        }));
-        contents.set(SlotPos.of(4, 1), Icon.click(bootsItem, clickEvent -> {
-            clickEvent.icon().item(ItemStackBuilder.from(bootsItem).glow().itemStack());
-        }));
+                selected.put(player.getUniqueId(), category.getSlotPos());
 
-        final Icon[] icons = new Icon[filteredItems.size()];
+                filteredItems.set(filteredItems.get().stream().filter(i -> i.getType() == category.type).collect(Collectors.toList()));
+
+                e.contents().set(category.getSlotPos(), Icon.click(ItemStackBuilder.from(category.getStack().clone()).glow().itemStack(), e1 -> {
+                    // RESET FILTER IF CLICKED ON SELECTED
+                    if (selected.get(player.getUniqueId()).equals(category.getSlotPos())) {
+                        selected.remove(player.getUniqueId());
+                        filteredItems.set(WyvenItems.instance.getItemManager().customItems);
+                    }
+
+                    init(contents);
+                }));
+                update(contents, filteredItems.get());
+            }));
+        }
+
+        final Icon[] icons = new Icon[filteredItems.get().size()];
         for (int i = 0; i < icons.length; i++) {
-            final Item cItem = filteredItems.get(i);
+            final Item cItem = filteredItems.get().get(i);
             icons[i] = Icon.click(cItem.getItem(), clickEvent -> {
                 WyvenItems.instance.getItemManager().giveItem(contents.player(), cItem, 1);
             });
@@ -114,14 +108,37 @@ public class ItemsMenuProvider implements InventoryProvider {
 
         pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 3)
                 .allowOverride(true)
-                .blacklist(1, 3).blacklist(1, 4).blacklist(1, 5).blacklist(1, 6).blacklist(1, 7)
-                .blacklist(2, 3).blacklist(2, 4).blacklist(2, 5).blacklist(2, 6).blacklist(2, 7)
-                .blacklist(3, 3).blacklist(3, 4).blacklist(3, 5).blacklist(3, 6).blacklist(3, 7)
-                .blacklist(4, 3).blacklist(4, 4).blacklist(4, 5).blacklist(4, 6).blacklist(4, 7));
+                .blacklist(1, 8).blacklist(2, 8).blacklist(3, 8).blacklist(4, 8)
+                .blacklist(2, 0).blacklist(2, 1).blacklist(2, 2)
+                .blacklist(3, 0).blacklist(3, 1).blacklist(3, 2)
+                .blacklist(4, 0).blacklist(4, 1).blacklist(4, 2));
 
         if (!pagination.isFirst())
-            contents.set(SlotPos.of(5, 4), Icon.click(previousPage, clickEvent -> contents.page().open(contents.player(), pagination.previous().getPage())));
+            contents.set(SlotPos.of(5, 4), Icon.click(GuiItem.PREVIOUS_PAGE_ITEM.getStack(), clickEvent -> contents.page().open(contents.player(), pagination.previous().getPage())));
         if (!pagination.isLast())
-            contents.set(SlotPos.of(5, 6), Icon.click(nextPage, clickEvent -> contents.page().open(contents.player(), pagination.next().getPage())));
+            contents.set(SlotPos.of(5, 6), Icon.click(GuiItem.NEXT_PAGE_ITEM.getStack(), clickEvent -> contents.page().open(contents.player(), pagination.next().getPage())));
+    }
+
+    public void update(@NotNull InventoryContents contents, List<Item> filter) {
+        final Pagination pagination = contents.pagination();
+
+
+        final Icon[] icons = new Icon[filter.size()];
+        for (int i = 0; i < icons.length; i++) {
+            final Item cItem = filter.get(i);
+            icons[i] = Icon.click(cItem.getItem(), clickEvent -> {
+                WyvenItems.instance.getItemManager().giveItem(contents.player(), cItem, 1);
+            });
+        }
+
+        pagination.setIcons(icons);
+        pagination.setIconsPerPage(20);
+
+        pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 3)
+                .allowOverride(true)
+                .blacklist(1, 8).blacklist(2, 8).blacklist(3, 8).blacklist(4, 8)
+                .blacklist(2, 0).blacklist(2, 1).blacklist(2, 2)
+                .blacklist(3, 0).blacklist(3, 1).blacklist(3, 2)
+                .blacklist(4, 0).blacklist(4, 1).blacklist(4, 2));
     }
 }

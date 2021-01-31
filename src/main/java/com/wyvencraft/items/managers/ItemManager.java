@@ -2,10 +2,11 @@ package com.wyvencraft.items.managers;
 
 
 import com.wyvencraft.api.integration.WyvenAPI;
+import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.ArmorPiece;
 import com.wyvencraft.items.data.ArmorSet;
 import com.wyvencraft.items.data.Item;
-import com.wyvencraft.items.WyvenItems;
+import com.wyvencraft.items.enums.ItemType;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.apache.commons.lang.WordUtils;
@@ -108,7 +109,15 @@ public class ItemManager {
 
                 final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
 
-                customItems.add(new Item(name, builder.itemStack(), itemKey, hasRecipe));
+                ItemType type = ItemType.valueOf(itemsFile.getString("ITEMS." + name + ".type", "NULL"));
+                if (name.toUpperCase().endsWith("_HELMET")) type = ItemType.HELMET;
+                else if (name.toUpperCase().endsWith("_CHESTPLATE")) type = ItemType.CHESTPLATE;
+                else if (name.toUpperCase().endsWith("_LEGGINGS")) type = ItemType.LEGGING;
+                else if (name.toUpperCase().endsWith("_BOOTS")) type = ItemType.BOOTS;
+                else if (builder.itemStack().getType() == Material.BOW || builder.itemStack().getType() == Material.CROSSBOW)
+                    type = ItemType.ARCHERY;
+
+                customItems.add(new Item(name, builder.itemStack(), itemKey, hasRecipe, type));
             }
         }
 
