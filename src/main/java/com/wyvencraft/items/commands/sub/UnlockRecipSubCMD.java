@@ -1,7 +1,9 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.items.Item;
+import com.wyvencraft.api.utils.MessageUtil;
+import com.wyvencraft.items.data.Item;
+import com.wyvencraft.items.utils.Message;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -19,47 +21,45 @@ public class UnlockRecipSubCMD extends SubCommand {
 
     @Override
     protected void handleCommand(CommandSender sender, String[] args) {
-        Player target;
+        Player target = sender instanceof Player ? (Player) sender : null;
         Item item;
-        if (args.length == 2) {
-            if (addon.getItemManager().getCustomItem(args[1]) == null) {
-                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[1]));
-                return;
-            }
 
-            item = addon.getItemManager().getCustomItem(args[1]);
-
-            if (sender instanceof Player)
-                target = (Player) sender;
-            else {
-                getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "NULL"));
-                return;
-            }
-
-        } else if (args.length == 3) {
-            if (addon.getItemManager().getCustomItem(args[1]) == null) {
-                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[1]));
-                return;
-            }
-
-            item = addon.getItemManager().getCustomItem(args[1]);
-
-            target = Bukkit.getPlayer(args[2]);
-            if (target == null) return;
-        } else {
-            sender.sendMessage("Usage: /customitem unlock <recipe> [player]");
+        if (args.length == 0) {
+            sender.sendMessage(MessageUtil.color("&cUsage: /wi unlock <recipe> [player]"));
             return;
         }
 
-        if (!item.isHasRecipe()) {
-            getPlugin().getLangManager().sendMessage(sender, "ITEMS.NO_RECIPE", r -> r.replace("{0}", args[1]));
+        item = addon.getItemManager().getCustomItem(args[0]);
+
+        if (item == null) {
+            getPlugin().getLangManager().sendMessage(sender, Message.INVALID_ITEM_MESSAGE.getPath(), r -> r.replace("{0}", args[0]));
+            return;
+        }
+
+        if (args.length >= 2) {
+            target = Bukkit.getPlayer(args[1]);
+            if (target == null) {
+                getPlugin().getLangManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
+                return;
+            }
+        }
+
+        if (target == null) {
+            getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
+            return;
+        }
+
+        if (item.hasRecipe()) {
+            getPlugin().getLangManager().sendMessage(sender, Message.NO_RECIPE_MESSAGE.getPath(), r -> r.replace("{0}", args[1]));
             return;
         }
 
         // UNLOCK RECIPE
         if (!target.hasDiscoveredRecipe(item.getKey()))
             addon.getItemManager().unlockRecipe(target, item);
-        else
-            getPlugin().getLangManager().sendMessage(target, "ITEMS.ALREADY_UNLOCKED", r -> r.replace("{0}", target.getName()).replace("{1}", args[1]));
+        else {
+            final String targetName = target.getName();
+            getPlugin().getLangManager().sendMessage(target, Message.ALREADY_UNLOCKED_MESSAGE.getPath(), r -> r.replace("{0}", args[1]).replace("{1}", targetName));
+        }
     }
 }

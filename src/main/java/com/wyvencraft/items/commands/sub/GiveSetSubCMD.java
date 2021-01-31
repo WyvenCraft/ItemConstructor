@@ -1,7 +1,8 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.items.ArmorSet;
+import com.wyvencraft.api.utils.MessageUtil;
+import com.wyvencraft.items.data.ArmorSet;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -20,39 +21,31 @@ public class GiveSetSubCMD extends SubCommand {
 
     @Override
     protected void handleCommand(CommandSender sender, String[] args) {
-        Player target;
+        Player target = sender instanceof Player ? (Player) sender : null;
         ArmorSet armorSet;
 
-        if (args.length == 2) {
-            if (addon.getItemManager().getArmorSetFromID(args[1]) == null) {
-                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[1]));
-                return;
-            }
+        if (args.length == 0) {
+            sender.sendMessage(MessageUtil.color("&cUsage: /wi giveset <set> [player]"));
+            return;
+        }
 
-            armorSet = addon.getItemManager().getArmorSetFromID(args[1]);
+        if (addon.getItemManager().getArmorSetFromID(args[0]) == null) {
+            getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[0]));
+            return;
+        }
 
-            if (sender instanceof Player)
-                target = (Player) sender;
-            else {
-                getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", args[1]));
-                return;
-            }
-        } else if (args.length == 3) {
-            if (addon.getItemManager().getArmorSetFromID(args[1]) == null) {
-                getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[1]));
-                return;
-            }
+        armorSet = addon.getItemManager().getArmorSetFromID(args[0]);
 
-            armorSet = addon.getItemManager().getArmorSetFromID(args[1]);
-
-            target = Bukkit.getPlayer(args[2]);
-
+        if (args.length >= 2) {
+            target = Bukkit.getPlayer(args[1]);
             if (target == null) {
+                getPlugin().getLangManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
                 return;
             }
+        }
 
-        } else {
-            sender.sendMessage("Usage: /customitem giveset <set> [player]");
+        if (target == null) {
+            getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
             return;
         }
 

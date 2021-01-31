@@ -2,7 +2,7 @@ package com.wyvencraft.items.commands;
 
 
 import com.wyvencraft.api.integration.WyvenAPI;
-import com.wyvencraft.items.Item;
+import com.wyvencraft.items.data.Item;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;

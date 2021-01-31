@@ -33,6 +33,7 @@
                 <configuration>
                     <outputDirectory>C:\Users\gkhaa\OneDrive\Skrivebord\testserver\plugins\WyvenCore\addons
                     </outputDirectory>
+                    <!--                    <outputDirectory>D:\WyvenCraftServer\server\plugins\WyvenCore\addons</outputDirectory>-->
                 </configuration>
             </plugin>
             <plugin>

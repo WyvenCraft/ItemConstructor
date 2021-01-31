@@ -1,4 +1,4 @@
-package com.wyvencraft.items;
+package com.wyvencraft.items.data;
 
 
 import org.bukkit.attribute.Attribute;

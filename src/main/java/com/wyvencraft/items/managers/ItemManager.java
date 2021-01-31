@@ -1,7 +1,11 @@
-package com.wyvencraft.items;
+package com.wyvencraft.items.managers;
 
 
 import com.wyvencraft.api.integration.WyvenAPI;
+import com.wyvencraft.items.data.ArmorPiece;
+import com.wyvencraft.items.data.ArmorSet;
+import com.wyvencraft.items.data.Item;
+import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.apache.commons.lang.WordUtils;

@@ -1,5 +1,6 @@
-package com.wyvencraft.items;
+package com.wyvencraft.items.data;
 
+import com.wyvencraft.items.WyvenItems;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

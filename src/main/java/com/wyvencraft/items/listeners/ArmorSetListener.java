@@ -2,8 +2,8 @@ package com.wyvencraft.items.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.wyvencraft.api.integration.WyvenAPI;
-import com.wyvencraft.items.ArmorPiece;
-import com.wyvencraft.items.ArmorSet;
+import com.wyvencraft.items.data.ArmorPiece;
+import com.wyvencraft.items.data.ArmorSet;
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.events.FullSetBuffEvent;
 import com.wyvencraft.items.events.FullSetDebuffEvent;

@@ -1,4 +1,4 @@
-package com.wyvencraft.items;
+package com.wyvencraft.items.data;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -20,7 +20,7 @@ public class Item {
         this.hasRecipe = hasRecipe;
     }
 
-    public boolean isHasRecipe() {
+    public boolean hasRecipe() {
         return hasRecipe;
     }
 

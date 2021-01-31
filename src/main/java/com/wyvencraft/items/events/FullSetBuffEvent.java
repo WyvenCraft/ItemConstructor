@@ -1,6 +1,6 @@
 package com.wyvencraft.items.events;
 
-import com.wyvencraft.items.ArmorSet;
+import com.wyvencraft.items.data.ArmorSet;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;

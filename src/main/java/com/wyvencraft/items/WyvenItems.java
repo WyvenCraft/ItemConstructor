@@ -4,13 +4,17 @@ import com.wyvencraft.api.addon.Addon;
 import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.commands.ItemsCMD;
 import com.wyvencraft.items.commands.ItemsTabCompleter;
+import com.wyvencraft.items.managers.ItemManager;
+import com.wyvencraft.items.menus.ItemsMenu;
+import com.wyvencraft.items.menus.ItemsMenuProvider;
+import com.wyvencraft.items.utils.Message;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class WyvenItems extends Addon {
 
     public static WyvenItems instance;
     private final ItemManager itemManager;
-    private final Language language;
 
     private static NamespacedKey WYVENITEM;
 
@@ -18,18 +22,19 @@ public class WyvenItems extends Addon {
         return WYVENITEM;
     }
 
+    private ItemsMenu itemsMenu;
+
     public WyvenItems(WyvenAPI plugin) {
         super(plugin);
         instance = this;
         WYVENITEM = new NamespacedKey(this.getPlugin().getPlugin(), "wyvenitems");
         itemManager = new ItemManager(this);
-        this.language = new Language(this);
     }
 
     @Override
     public void onLoad() {
         saveDefaultConfig("items.yml");
-        language.initLang();
+        loadMessages();
 
         itemManager.loadItems();
     }
@@ -39,6 +44,7 @@ public class WyvenItems extends Addon {
         ItemsCMD cmd = new ItemsCMD(this);
         getPlugin().registerCommand("wyvenitems", cmd, new ItemsTabCompleter(this), "Main command to accessing and giving custom items", "/wyvenitems <argument>", "witem", "witems", "wi");
 
+        itemsMenu = new ItemsMenu(getPlugin().getSmartInventory(), new ItemsMenuProvider());
     }
 
     @Override
@@ -51,12 +57,26 @@ public class WyvenItems extends Addon {
         reloadConfig("items.yml");
     }
 
+    private void loadMessages() {
+        final FileConfiguration langFile = getPlugin().getConfig(getPlugin().getLangManager().getLanguage() + ".yml");
+
+        for (Message msg : Message.values()) {
+            if (!langFile.isSet(msg.getPath()))
+                if (msg.getDefaultMessage().length > 1) langFile.set(msg.getPath(), msg.getDefaultMessage());
+                else langFile.set(msg.getPath(), msg.getDefaultMessage()[0]);
+        }
+
+        getPlugin().saveConfig(getPlugin().getLangManager().getLanguage() + ".yml");
+    }
+
     public ItemManager getItemManager() {
         return itemManager;
     }
 
-
-    /*
+    public ItemsMenu getItemsMenu() {
+        return itemsMenu;
+    }
+/*
     public static void fullSetBonus(PlayerStats ps, ArmorSet set, boolean debuff) {
         for (String line : set.getFullsetActions()) {
             String[] action = line.split("] ", 2);
