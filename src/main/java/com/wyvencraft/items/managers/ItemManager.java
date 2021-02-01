@@ -6,6 +6,7 @@ import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.ArmorPiece;
 import com.wyvencraft.items.data.ArmorSet;
 import com.wyvencraft.items.data.Item;
+import com.wyvencraft.items.data.ItemRecipe;
 import com.wyvencraft.items.enums.ItemType;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
@@ -104,8 +105,14 @@ public class ItemManager {
                     }
                 }
 
-                // JUST FOR NOW
-                final boolean hasRecipe = false;
+                boolean recipeEnabled = itemsSection.getBoolean(name + ".recipe.enabled", false);
+                final ConfigurationSection recipeSection = itemsSection.getConfigurationSection(name + ".recipe.shape");
+                ItemRecipe recipe = null;
+                if (recipeSection != null) {
+                    recipe = createRecipe(recipeSection, builder.itemStack());
+                } else {
+                    recipeEnabled = false;
+                }
 
                 final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
 
@@ -117,29 +124,41 @@ public class ItemManager {
                 else if (builder.itemStack().getType() == Material.BOW || builder.itemStack().getType() == Material.CROSSBOW)
                     type = ItemType.ARCHERY;
 
-                customItems.add(new Item(name, builder.itemStack(), itemKey, hasRecipe, type));
+                customItems.add(new Item(name, builder.itemStack(), itemKey, recipeEnabled, recipe, type));
             }
         }
 
-        ConfigurationSection setsSection = itemsFile.getConfigurationSection("ARMOR_SETS");
-        if (setsSection != null) {
-            for (String id : setsSection.getKeys(false)) {
-                List<String> fullsetBonus = setsSection.getStringList(id + ".fullset_bonus");
-                List<String> pieces = new ArrayList<>();
-                for (String pieceName : setsSection.getStringList(id + ".pieces")) {
-                    Item piece = getCustomItem(pieceName);
+        // LOAD ARMOR SETS
+    }
 
-                    if (piece == null) {
-                        plugin.getLogger().severe("could not load " + pieceName + " for " + id);
-                        continue;
-                    }
+    public ItemRecipe createRecipe(ConfigurationSection recipeSection, ItemStack result) {
+        Map<Integer, ItemStack> recipe = new HashMap<>();
 
-                    pieces.add(pieceName);
-                }
-
-                armorSets.add(new ArmorSet(id, pieces, fullsetBonus));
+        for (String raw : recipeSection.getKeys(false)) {
+            final int slot = Utils.getInteger(raw);
+            if (slot == -1) {
+                plugin.getLogger().severe(raw + " has to be a number (0-8).");
+                return null;
             }
+
+            ItemStack ingredient;
+
+            final String[] ingredStr = recipeSection.getString(raw).split(":", 2);
+            try {
+                int amount = Utils.getInteger(ingredStr[1]);
+                final Material material = Material.valueOf(ingredStr[0]);
+
+                ingredient = new ItemStack(material, amount);
+
+            } catch (IllegalArgumentException e) {
+                plugin.getLogger().severe(ingredStr[0] + " is invalid material");
+                continue;
+            }
+
+            recipe.put(slot, ingredient);
         }
+
+        return new ItemRecipe(recipe, ItemRecipe.ShapeType.SHAPED, result);
     }
 
     public ItemStackBuilder getBuilder(ConfigurationSection section) {

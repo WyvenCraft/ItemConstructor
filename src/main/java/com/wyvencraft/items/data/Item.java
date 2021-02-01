@@ -10,17 +10,16 @@ public class Item {
     private final String name;
     private final ItemStack item;
     private final NamespacedKey key;
-    private Recipe recipe;
+    private final ItemRecipe recipe;
     private final boolean hasRecipe;
     private final ItemType type;
 
-
-    public Item(String name, ItemStack item, NamespacedKey key, boolean hasRecipe, ItemType type) {
+    public Item(String name, ItemStack item, NamespacedKey key, boolean hasRecipe, ItemRecipe recipe, ItemType type) {
         this.name = name;
         this.item = item;
         this.key = key;
         this.type = type;
-        this.recipe = null;
+        this.recipe = recipe;
         this.hasRecipe = hasRecipe;
     }
 
@@ -40,12 +39,8 @@ public class Item {
         return item;
     }
 
-    public Recipe getRecipe() {
+    public ItemRecipe getRecipe() {
         return recipe;
-    }
-
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
     }
 
     public ItemType getType() {

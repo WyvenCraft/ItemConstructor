@@ -80,7 +80,7 @@ public class ItemsMenuProvider implements InventoryProvider {
 
                 selected.put(player.getUniqueId(), category.getSlotPos());
 
-                filteredItems.set(filteredItems.get().stream().filter(i -> i.getType() == category.type).collect(Collectors.toList()));
+                filteredItems.set(WyvenItems.instance.getItemManager().customItems.stream().filter(i -> i.getType() == category.type).collect(Collectors.toList()));
 
                 e.contents().set(category.getSlotPos(), Icon.click(ItemStackBuilder.from(category.getStack().clone()).glow().itemStack(), e1 -> {
                     // RESET FILTER IF CLICKED ON SELECTED
@@ -91,27 +91,12 @@ public class ItemsMenuProvider implements InventoryProvider {
 
                     init(contents);
                 }));
+
                 update(contents, filteredItems.get());
             }));
         }
 
-        final Icon[] icons = new Icon[filteredItems.get().size()];
-        for (int i = 0; i < icons.length; i++) {
-            final Item cItem = filteredItems.get().get(i);
-            icons[i] = Icon.click(cItem.getItem(), clickEvent -> {
-                WyvenItems.instance.getItemManager().giveItem(contents.player(), cItem, 1);
-            });
-        }
-
-        pagination.setIcons(icons);
-        pagination.setIconsPerPage(20);
-
-        pagination.addToIterator(contents.newIterator(SlotIterator.Type.HORIZONTAL, 1, 3)
-                .allowOverride(true)
-                .blacklist(1, 8).blacklist(2, 8).blacklist(3, 8).blacklist(4, 8)
-                .blacklist(2, 0).blacklist(2, 1).blacklist(2, 2)
-                .blacklist(3, 0).blacklist(3, 1).blacklist(3, 2)
-                .blacklist(4, 0).blacklist(4, 1).blacklist(4, 2));
+        update(contents, filteredItems.get());
 
         if (!pagination.isFirst())
             contents.set(SlotPos.of(5, 4), Icon.click(GuiItem.PREVIOUS_PAGE_ITEM.getStack(), clickEvent -> contents.page().open(contents.player(), pagination.previous().getPage())));
@@ -122,12 +107,33 @@ public class ItemsMenuProvider implements InventoryProvider {
     public void update(@NotNull InventoryContents contents, List<Item> filter) {
         final Pagination pagination = contents.pagination();
 
+//        Debug.log("items: " + filter.size());
+
+        final Player player = contents.player();
+
+        if (!player.hasPermission("wyvencore.items.giveitem")) {
+            filter = filter.stream().filter(Item::hasRecipe).collect(Collectors.toList());
+        }
 
         final Icon[] icons = new Icon[filter.size()];
         for (int i = 0; i < icons.length; i++) {
             final Item cItem = filter.get(i);
-            icons[i] = Icon.click(cItem.getItem(), clickEvent -> {
-                WyvenItems.instance.getItemManager().giveItem(contents.player(), cItem, 1);
+
+            icons[i] = Icon.click(cItem.getItem(), e -> {
+
+                if (e.click().isRightClick()) {
+                    if (player.hasPermission("wyvencore.items.giveitem"))
+                        WyvenItems.instance.getItemManager().giveItem(contents.player(), cItem, 1);
+                    else if (cItem.hasRecipe()) {
+                        // View recipe in a new menu
+                        player.sendMessage("item have a recipe: rightclicked");
+                    }
+                } else if (e.click().isLeftClick()) {
+                    if (cItem.hasRecipe()) {
+                        // View recipe in a new menu
+                        player.sendMessage("item have a recipe: leftclicked");
+                    }
+                }
             });
         }
 

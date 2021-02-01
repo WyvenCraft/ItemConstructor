@@ -1,5 +1,6 @@
 package com.wyvencraft.items.utils;
 
+import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Color;
 
 public class Utils {
@@ -9,5 +10,13 @@ public class Utils {
                 Integer.valueOf(hex.substring(3, 5), 16),
                 Integer.valueOf(hex.substring(5, 7), 16)
         );
+    }
+
+    public static int getInteger(String str) {
+        try {
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
     }
 }

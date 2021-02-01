@@ -88,13 +88,14 @@ ARMOR_SETS:
 
 ITEMS:
   MUSHROOM_ARMOR_HELMET:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_RED_MUSHROOM
-      2: ENCHANTED_RED_MUSHROOM
-      3: ENCHANTED_RED_MUSHROOM
-      4: ENCHANTED_RED_MUSHROOM
-      6: ENCHANTED_RED_MUSHROOM
+      enabled: false
+      shape:
+        1: ENCHANTED_RED_MUSHROOM
+        2: ENCHANTED_RED_MUSHROOM
+        3: ENCHANTED_RED_MUSHROOM
+        4: ENCHANTED_RED_MUSHROOM
+        6: ENCHANTED_RED_MUSHROOM
     item:
       material: LEATHER_HELMET
       name: "&aMushroom Armor Helmet"
@@ -113,16 +114,17 @@ ITEMS:
       attack_damage: 50
       movement_speed: 50
   MUSHROOM_ARMOR_CHESTPLATE:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_RED_MUSHROOM
-      3: ENCHANTED_RED_MUSHROOM
-      4: ENCHANTED_RED_MUSHROOM
-      5: ENCHANTED_RED_MUSHROOM
-      6: ENCHANTED_RED_MUSHROOM
-      7: ENCHANTED_RED_MUSHROOM
-      8: ENCHANTED_RED_MUSHROOM
-      9: ENCHANTED_RED_MUSHROOM
+      enabled: false
+      shape:
+        1: ENCHANTED_RED_MUSHROOM
+        3: ENCHANTED_RED_MUSHROOM
+        4: ENCHANTED_RED_MUSHROOM
+        5: ENCHANTED_RED_MUSHROOM
+        6: ENCHANTED_RED_MUSHROOM
+        7: ENCHANTED_RED_MUSHROOM
+        8: ENCHANTED_RED_MUSHROOM
+        9: ENCHANTED_RED_MUSHROOM
     item:
       material: LEATHER_CHESTPLATE
       name: "&fMushroom Armor Chestplate"
@@ -133,15 +135,16 @@ ITEMS:
         - "&f&lCOMMON"
       color: "#fc4d4d"
   MUSHROOM_ARMOR_LEGGINGS:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_RED_MUSHROOM
-      2: ENCHANTED_RED_MUSHROOM
-      3: ENCHANTED_RED_MUSHROOM
-      4: ENCHANTED_RED_MUSHROOM
-      6: ENCHANTED_RED_MUSHROOM
-      7: ENCHANTED_RED_MUSHROOM
-      9: ENCHANTED_RED_MUSHROOM
+      enabled: false
+      shape:
+        1: ENCHANTED_RED_MUSHROOM
+        2: ENCHANTED_RED_MUSHROOM
+        3: ENCHANTED_RED_MUSHROOM
+        4: ENCHANTED_RED_MUSHROOM
+        6: ENCHANTED_RED_MUSHROOM
+        7: ENCHANTED_RED_MUSHROOM
+        9: ENCHANTED_RED_MUSHROOM
     item:
       material: LEATHER_LEGGINGS
       name: "&fMushroom Armor Leggings"
@@ -152,12 +155,13 @@ ITEMS:
         - "&f&lCOMMON"
       color: "#fc4d4d"
   MUSHROOM_ARMOR_BOOTS:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_RED_MUSHROOM
-      3: ENCHANTED_RED_MUSHROOM
-      4: ENCHANTED_RED_MUSHROOM
-      6: ENCHANTED_RED_MUSHROOM
+      enabled: false
+      shape:
+        1: ENCHANTED_RED_MUSHROOM
+        3: ENCHANTED_RED_MUSHROOM
+        4: ENCHANTED_RED_MUSHROOM
+        6: ENCHANTED_RED_MUSHROOM
     item:
       material: LEATHER_BOOTS
       name: "&fMushroom Armor Boots"
@@ -168,7 +172,7 @@ ITEMS:
         - "&f&lCOMMON"
       color: "#fc4d4d"
   FARMING_SUIT_HELMET:
-    recipe-enabled: true
+    recipe-enabled: false
     recipe:
       1: ENCHANTED_HAY_BALE;8
       2: ENCHANTED_HAY_BALE;8
@@ -185,16 +189,17 @@ ITEMS:
         - "&9&lRARE"
       color: "#fc0080"
   FARMING_SUIT_CHESTPLATE:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_HAY_BALE;8
-      3: ENCHANTED_HAY_BALE;8
-      4: ENCHANTED_HAY_BALE;8
-      5: ENCHANTED_HAY_BALE;8
-      6: ENCHANTED_HAY_BALE;8
-      7: ENCHANTED_HAY_BALE;8
-      8: ENCHANTED_HAY_BALE;8
-      9: ENCHANTED_HAY_BALE;8
+      enabled: false
+      shape:
+        1: ENCHANTED_HAY_BALE;8
+        3: ENCHANTED_HAY_BALE;8
+        4: ENCHANTED_HAY_BALE;8
+        5: ENCHANTED_HAY_BALE;8
+        6: ENCHANTED_HAY_BALE;8
+        7: ENCHANTED_HAY_BALE;8
+        8: ENCHANTED_HAY_BALE;8
+        9: ENCHANTED_HAY_BALE;8
     item:
       material: LEATHER_CHESTPLATE
       name: "&9Farming Suit Chestplate"
@@ -205,15 +210,16 @@ ITEMS:
         - "&9&lRARE"
       color: "#fc0080"
   FARMING_SUIT_LEGGINGS:
-    recipe-enabled: true
     recipe:
-      1: ENCHANTED_HAY_BALE;8
-      2: ENCHANTED_HAY_BALE;8
-      3: ENCHANTED_HAY_BALE;8
-      4: ENCHANTED_HAY_BALE;8
-      6: ENCHANTED_HAY_BALE;8
-      7: ENCHANTED_HAY_BALE;8
-      9: ENCHANTED_HAY_BALE;8
+      enabled: false
+      shape:
+        1: HAY_BALE;8
+        2: HAY_BALE;8
+        3: HAY_BALE;8
+        4: HAY_BALE;8
+        6: HAY_BALE;8
+        7: HAY_BALE;8
+        9: HAY_BALE;8
     item:
       material: LEATHER_LEGGINGS
       name: "&9Farming Suit Leggings"

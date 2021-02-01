@@ -20,6 +20,7 @@ public class ItemsCMD extends Command {
                 new GiveSubCMD(addon, "give", "wyvencore.items.giveitem", 0),
                 new LockRecipeSubCMD(addon, "lock", "wyvencore.items.lockrecipe", 0),
                 new UnlockRecipSubCMD(addon, "unlock", "wyvencore.items.unlockrecipe", 0));
+        // view recipe
         this.addon = addon;
     }
 
