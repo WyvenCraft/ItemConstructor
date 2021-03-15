@@ -143,10 +143,13 @@ public class ItemManager {
 
             ItemStack ingredient;
 
-            final String[] ingredStr = recipeSection.getString(raw).split(":", 2);
+            final String[] ingredStr = recipeSection.getString(raw).split(";", 2);
             try {
-                int amount = Utils.getInteger(ingredStr[1]);
                 final Material material = Material.valueOf(ingredStr[0]);
+                int amount = 1;
+                if (ingredStr.length > 1) {
+                    amount = Utils.getInteger(ingredStr[1]);
+                }
 
                 ingredient = new ItemStack(material, amount);
 
