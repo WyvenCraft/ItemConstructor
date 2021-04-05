@@ -11,20 +11,26 @@ public class Item {
     private final ItemStack item;
     private final NamespacedKey key;
     private final ItemRecipe recipe;
-    private final boolean hasRecipe;
     private final ItemType type;
 
-    public Item(String name, ItemStack item, NamespacedKey key, boolean hasRecipe, ItemRecipe recipe, ItemType type) {
+    public Item(Item item) {
+        this.name = item.getName();
+        this.item = item.getItem();
+        this.key = item.getKey();
+        this.recipe = item.recipe;
+        this.type = item.getType();
+    }
+
+    public Item(String name, ItemStack item, NamespacedKey key, ItemRecipe recipe, ItemType type) {
         this.name = name;
         this.item = item;
         this.key = key;
         this.type = type;
         this.recipe = recipe;
-        this.hasRecipe = hasRecipe;
     }
 
     public boolean hasRecipe() {
-        return hasRecipe;
+        return (recipe != null);
     }
 
     public NamespacedKey getKey() {

@@ -86,7 +86,7 @@ ARMOR_SETS:
       - "MINER_ARMOR_LEGGINGS"
       - "MINER_ARMOR_BOOTS"
 
-ITEMS:
+items:
   MUSHROOM_ARMOR_HELMET:
     recipe:
       enabled: false

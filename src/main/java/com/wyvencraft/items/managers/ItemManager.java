@@ -32,7 +32,7 @@ public class ItemManager {
     private final WyvenItems addon;
     private final WyvenAPI plugin;
 
-    private final NamespacedKey HELMETKEY;
+    private final NamespacedKey HELMET_KEY;
 
     public List<Item> customItems = new ArrayList<>();
     public List<ArmorSet> armorSets = new ArrayList<>();
@@ -42,13 +42,12 @@ public class ItemManager {
         this.addon = addon;
         this.plugin = addon.getPlugin();
 
-        HELMETKEY = new NamespacedKey(plugin.getPlugin(), "helmet");
+        HELMET_KEY = new NamespacedKey(plugin.getPlugin(), "helmet");
     }
-
 
     public void loadItems() {
         FileConfiguration itemsFile = addon.getConfig("items.yml");
-        ConfigurationSection itemsSection = itemsFile.getConfigurationSection("ITEMS");
+        ConfigurationSection itemsSection = itemsFile.getConfigurationSection("items");
 
         customItems.clear();
         armorSets.clear();
@@ -60,20 +59,18 @@ public class ItemManager {
 
                 ItemStackBuilder builder = getBuilder(itemSection);
 
+                EquipmentSlot slot = getEquipmentSlot(name);
+
+                ItemType type = getItemType(itemsFile.getString("items." + name + ".type", null), builder.itemStack().getType());
+                if (type == null) {
+                    plugin.getLogger().warning("'items." + name + ".type' in items.yml doesnt exist");
+                    continue;
+                }
+
                 // Setup attributes
                 ConfigurationSection statsSection = itemsSection.getConfigurationSection(name + ".stats");
                 if (statsSection != null) {
                     List<String> statsLoreSection = new ArrayList<>();
-
-                    final String equipSlotStr = name.toUpperCase();
-
-                    final EquipmentSlot slot;
-
-                    if (equipSlotStr.endsWith("_HELMET")) slot = EquipmentSlot.HEAD;
-                    else if (equipSlotStr.endsWith("_CHESTPLATE")) slot = EquipmentSlot.CHEST;
-                    else if (equipSlotStr.endsWith("_LEGGINGS")) slot = EquipmentSlot.LEGS;
-                    else if (equipSlotStr.endsWith("_BOOTS")) slot = EquipmentSlot.FEET;
-                    else slot = null;
 
                     for (String attrName : statsSection.getKeys(false)) {
                         Attribute attribute;
@@ -106,29 +103,51 @@ public class ItemManager {
                 }
 
                 boolean recipeEnabled = itemsSection.getBoolean(name + ".recipe.enabled", false);
-                final ConfigurationSection recipeSection = itemsSection.getConfigurationSection(name + ".recipe.shape");
                 ItemRecipe recipe = null;
-                if (recipeSection != null) {
-                    recipe = createRecipe(recipeSection, builder.itemStack());
-                } else {
-                    recipeEnabled = false;
+                if (recipeEnabled) {
+                    final ConfigurationSection recipeSection = itemsSection.getConfigurationSection(name + ".recipe.shape");
+                    if (recipeSection != null) {
+                        recipe = createRecipe(recipeSection, builder.itemStack());
+                    } else {
+                        plugin.getLogger().warning(name + " has recipes enabled, but missing 'recipe.shape'-section");
+                        continue;
+                    }
                 }
 
                 final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
 
-                ItemType type = ItemType.valueOf(itemsFile.getString("ITEMS." + name + ".type", "NULL"));
-                if (name.toUpperCase().endsWith("_HELMET")) type = ItemType.HELMET;
-                else if (name.toUpperCase().endsWith("_CHESTPLATE")) type = ItemType.CHESTPLATE;
-                else if (name.toUpperCase().endsWith("_LEGGINGS")) type = ItemType.LEGGING;
-                else if (name.toUpperCase().endsWith("_BOOTS")) type = ItemType.BOOTS;
-                else if (builder.itemStack().getType() == Material.BOW || builder.itemStack().getType() == Material.CROSSBOW)
-                    type = ItemType.ARCHERY;
-
-                customItems.add(new Item(name, builder.itemStack(), itemKey, recipeEnabled, recipe, type));
+                customItems.add(new Item(name, builder.itemStack(), itemKey, recipe, type));
             }
         }
 
         // LOAD ARMOR SETS
+    }
+
+    private ItemType getItemType(String value, Material material) {
+        try {
+            return ItemType.valueOf(value);
+        } catch (Exception e) {
+            if (material.name().endsWith("_HELMET")) return ItemType.HELMET;
+            else if (material.name().endsWith("_CHESTPLATE")) return ItemType.CHESTPLATE;
+            else if (material.name().endsWith("_LEGGINGS")) return ItemType.LEGGING;
+            else if (material.name().endsWith("_BOOTS")) return ItemType.BOOTS;
+            else if (material == Material.BOW || material == Material.CROSSBOW) return ItemType.ARCHERY;
+            else return null;
+        }
+    }
+
+    private EquipmentSlot getEquipmentSlot(String material) {
+        final String equipSlotStr = material.toUpperCase();
+
+        final EquipmentSlot slot;
+
+        if (equipSlotStr.endsWith("_HELMET")) slot = EquipmentSlot.HEAD;
+        else if (equipSlotStr.endsWith("_CHESTPLATE")) slot = EquipmentSlot.CHEST;
+        else if (equipSlotStr.endsWith("_LEGGINGS")) slot = EquipmentSlot.LEGS;
+        else if (equipSlotStr.endsWith("_BOOTS")) slot = EquipmentSlot.FEET;
+        else slot = null;
+
+        return slot;
     }
 
     public ItemRecipe createRecipe(ConfigurationSection recipeSection, ItemStack result) {
@@ -146,14 +165,12 @@ public class ItemManager {
             final String[] ingredStr = recipeSection.getString(raw).split(";", 2);
             try {
                 final Material material = Material.valueOf(ingredStr[0]);
-                int amount = 1;
-                if (ingredStr.length > 1) {
-                    amount = Utils.getInteger(ingredStr[1]);
-                }
+                int amount = ingredStr.length > 1 ? Utils.getInteger(ingredStr[1]) : 1;
 
                 ingredient = new ItemStack(material, amount);
 
             } catch (IllegalArgumentException e) {
+                // TODO check if its a custom item
                 plugin.getLogger().severe(ingredStr[0] + " is invalid material");
                 continue;
             }
@@ -200,29 +217,26 @@ public class ItemManager {
     }
 
     public void unlockRecipe(Player p, Item item) {
-        if (p.hasDiscoveredRecipe(item.getKey())) {
-            p.sendMessage(item.getName() + " recipes have already been unlocked");
+        if (!p.discoverRecipe(item.getKey())) {
+            p.sendMessage(item.getName() + " recipe have already been unlocked");
             return;
         }
-
-        p.discoverRecipe(item.getKey());
 
         p.sendMessage("you have unlocked a new recipe for " + item.getName());
     }
 
     public void lockRecipe(Player p, Item item) {
-        if (!p.hasDiscoveredRecipe(item.getKey())) {
+        if (!p.undiscoverRecipe(item.getKey())) {
             p.sendMessage("You havent unlocked " + item.getName());
             return;
         }
 
-        p.undiscoverRecipe(item.getKey());
         p.sendMessage("you no longer have access to " + item.getName() + " recipe");
     }
 
     public void giveSet(Player p, ArmorSet set) {
-        for (String armorPiece : set.getPieces()) {
-            Item piece = getArmorPiece(armorPiece).getItem();
+        for (String pieceID : set.getPieces()) {
+            Item piece = getArmorPiece(pieceID).getItem();
 
             giveItem(p, piece, 1);
         }
@@ -284,9 +298,14 @@ public class ItemManager {
 
         PersistentDataContainer pdc = ItemStackBuilder.from(itemStack).meta().getPersistentDataContainer();
 
-        if (pdc.has(HELMETKEY, PersistentDataType.STRING)) return true;
-        else if (type.endsWith("_CHESTPLATE") || type.endsWith("ELYTRA")) return true;
-        else if (type.endsWith("_LEGGINGS")) return true;
-        else return type.endsWith("_BOOTS");
+        if (pdc.has(HELMET_KEY, PersistentDataType.STRING)) return true;
+        else {
+            return (type.endsWith("_HELMET") ||
+                    type.endsWith("_CHESTPLATE") ||
+                    type.endsWith("_LEGGINGS") ||
+                    type.endsWith("_BOOTS") ||
+                    type.equals("ELYTRA"));
+
+        }
     }
 }
