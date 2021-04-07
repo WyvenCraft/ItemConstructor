@@ -29,8 +29,7 @@ public class ArmorSetListener implements Listener {
     @EventHandler
     public void onEquipArmor(PlayerArmorChangeEvent e) {
         if (e.getNewItem() != null && e.getNewItem().getType() != Material.AIR) {
-            PersistentDataContainer pdc = ItemStackBuilder.from(e.getNewItem()).meta().getPersistentDataContainer();
-            if (!pdc.has(WyvenItems.getItemKey(), PersistentDataType.STRING)) return;
+            if (!addon.getItemManager().isCustomItem(e.getNewItem())) return;
 
             ArmorPiece armorPiece = addon.getItemManager().getArmorPiece(e.getNewItem());
             if (armorPiece == null) return;
@@ -58,8 +57,7 @@ public class ArmorSetListener implements Listener {
     @EventHandler
     public void onUnEquipArmor(PlayerArmorChangeEvent e) {
         if (e.getOldItem() != null && e.getOldItem().getType() != Material.AIR) {
-            PersistentDataContainer pdc = ItemStackBuilder.from(e.getOldItem()).meta().getPersistentDataContainer();
-            if (!pdc.has(WyvenItems.getItemKey(), PersistentDataType.STRING)) return;
+            if (!addon.getItemManager().isCustomItem(e.getOldItem())) return;
 
             ArmorPiece armorPiece = addon.getItemManager().getArmorPiece(e.getOldItem());
             if (armorPiece == null) return;

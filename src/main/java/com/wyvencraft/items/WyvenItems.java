@@ -4,6 +4,7 @@ import com.wyvencraft.api.addon.Addon;
 import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.commands.ItemsCMD;
 import com.wyvencraft.items.commands.ItemsTabCompleter;
+import com.wyvencraft.items.listeners.OrbListener;
 import com.wyvencraft.items.managers.ItemManager;
 import com.wyvencraft.items.menus.ItemsMenu;
 import com.wyvencraft.items.menus.ItemsMenuProvider;
@@ -16,18 +17,16 @@ public class WyvenItems extends Addon {
     public static WyvenItems instance;
     private final ItemManager itemManager;
 
-    private static NamespacedKey WYVENITEM;
-
-    public static NamespacedKey getItemKey() {
-        return WYVENITEM;
-    }
+    public static NamespacedKey WYVEN_ITEM;
+    public static NamespacedKey ITEM_TYPE;
 
     private ItemsMenu itemsMenu;
 
     public WyvenItems(WyvenAPI plugin) {
         super(plugin);
         instance = this;
-        WYVENITEM = new NamespacedKey(this.getPlugin().getPlugin(), "wyvenitems");
+        WYVEN_ITEM = new NamespacedKey(this.getPlugin().getPlugin(), "wyvenitems");
+        ITEM_TYPE = new NamespacedKey(this.getPlugin().getPlugin(), "type");
         itemManager = new ItemManager(this);
     }
 
@@ -43,6 +42,8 @@ public class WyvenItems extends Addon {
     public void onEnable() {
         ItemsCMD cmd = new ItemsCMD(this);
         getPlugin().registerCommand("wyvenitems", cmd, new ItemsTabCompleter(this), "Main command to accessing and giving custom items", "/wyvenitems <argument>", "witem", "witems", "wi");
+
+        getPlugin().getAddonHandler().registerListener(this, new OrbListener(itemManager));
 
         itemsMenu = new ItemsMenu(getPlugin().getSmartInventory(), new ItemsMenuProvider());
     }

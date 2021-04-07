@@ -80,7 +80,9 @@ public class ItemsMenuProvider implements InventoryProvider {
 
                 selected.put(player.getUniqueId(), category.getSlotPos());
 
-                filteredItems.set(WyvenItems.instance.getItemManager().customItems.stream().filter(i -> i.getType() == category.type).collect(Collectors.toList()));
+                filteredItems.set(WyvenItems.instance.getItemManager().customItems.stream()
+                        .filter(i -> i.getType() == category.type)
+                        .collect(Collectors.toList()));
 
                 e.contents().set(category.getSlotPos(), Icon.click(ItemStackBuilder.from(category.getStack().clone()).glow().itemStack(), e1 -> {
                     // RESET FILTER IF CLICKED ON SELECTED

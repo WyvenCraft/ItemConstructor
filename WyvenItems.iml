@@ -11,9 +11,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: com.wyvencraft:WyvenAPI:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: io.github.portlek:BukkitItemBuilder:3.1" level="project" />
-    <orderEntry type="library" name="Maven: io.github.portlek:bukkit-version:1.8" level="project" />
-    <orderEntry type="library" name="Maven: com.github.cryptomorin:XSeries:7.5.3" level="project" />
+    <orderEntry type="library" name="Maven: io.github.portlek:BukkitItemBuilder:4.0.1" level="project" />
+    <orderEntry type="library" name="Maven: io.github.portlek:bukkit-version:2.0.7" level="project" />
+    <orderEntry type="library" name="Maven: com.github.cryptomorin:XSeries:7.7.0" level="project" />
     <orderEntry type="library" name="Maven: io.github.bananapuncher714:NBTEditor:7.16" level="project" />
     <orderEntry type="library" name="Maven: io.github.portlek:SmartInventory:3.0.8" level="project" />
     <orderEntry type="library" name="Maven: io.leangen.geantyref:geantyref:1.3.11" level="project" />
