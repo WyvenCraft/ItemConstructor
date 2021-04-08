@@ -108,7 +108,7 @@ items:
         1:
           target: FRIENDLY
           attribute: "attack_damage;50"
-          potion: "swiftness"
+          potion: "swiftness;2"
         2:
           target: FRIENDLY
           attribute: "max_health;100"

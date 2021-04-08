@@ -2,12 +2,16 @@ package com.wyvencraft.items.data;
 
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.listeners.OrbListener;
+import com.wyvencraft.items.utils.Debug;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -15,8 +19,8 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SpawnedOrb {
-    public static List<ArmorStand> activeOrbs = new ArrayList<>();
+public class SpawnedOrb implements Listener {
+//    public static List<ArmorStand> activeOrbs = new ArrayList<>();
 
     public final Orb orb;
     public final Player owner;
@@ -26,7 +30,8 @@ public class SpawnedOrb {
 
     private final DecimalFormat df = new DecimalFormat("#0.0");
 
-    private final Map<Player, OrbModifier> applied = new HashMap<>();
+    private final Set<Player> applied = new HashSet<>();
+
 
     public SpawnedOrb(Orb orb, Player owner, Location location) {
         this.orb = orb;
@@ -50,8 +55,7 @@ public class SpawnedOrb {
             armorStand.addDisabledSlots(EquipmentSlot.values());
         });
 
-        activeOrbs.add(armorStand);
-
+//        activeOrbs.add(armorStand);
         applyEffects(true);
 
         new BukkitRunnable() {
@@ -66,14 +70,12 @@ public class SpawnedOrb {
             @Override
             public void run() {
                 if (timeToDespawn <= 0 || !owner.isOnline() || armorStand.isDead()) {
-
                     removeEffects();
 
-                    activeOrbs.remove(armorStand);
                     armorStand.remove();
-                    OrbListener.orbCooldown.get(owner).remove(orb);
-                    OrbListener.activeOrb.remove(owner.getUniqueId());
                     cancel();
+                    OrbListener.orbCooldown.get(owner.getUniqueId()).remove(orb);
+                    OrbListener.activeOrb.remove(owner.getUniqueId());
                     return;
                 }
 
@@ -106,34 +108,45 @@ public class SpawnedOrb {
                 .collect(Collectors.toList());
 
         if (nearbyPlayers.size() != applied.size()) {
-            for (Player player : applied.keySet()) {
-                if (!nearbyPlayers.contains(player)) removeEffects(player);
+            for (Player player : applied) {
+                if (!nearbyPlayers.contains(player)) removeEffects(player, true);
             }
         }
 
         for (Player target : nearbyPlayers) {
-            if (applied.containsKey(target)) continue;
+            location.getWorld().spawnParticle(Particle.SPELL_INSTANT, target.getLocation(), 5, 0, 0.2, 0, 5, null, false);
+
+            if (applied.contains(target)) continue;
+
+            if (!target.hasMetadata(owner.getUniqueId().toString())) {
+                target.setMetadata(owner.getUniqueId().toString(), new FixedMetadataValue(WyvenItems.instance.getPlugin().getPlugin(), 0));
+            }
 
             for (OrbModifier modifier : orb.getModifiers()) {
-                if (initModifiers && !modifier.isOnlyOnInit()) continue;
+                if (modifier.isOnlyOnInit() && !initModifiers) continue;
                 // TODO Use WyvenGuilds to check if the target player is friendly or not.
 
                 modifier.apply(target);
-                applied.put(target, modifier);
             }
+
+            applied.add(target);
         }
     }
 
     private void removeEffects() {
-        for (Map.Entry<Player, OrbModifier> player : applied.entrySet()) {
-            player.getValue().clear(player.getKey());
+        for (Player player : applied) {
+            removeEffects(player, false);
         }
 
         applied.clear();
     }
 
-    private void removeEffects(Player player) {
-        applied.get(player).clear(player);
-        applied.remove(player);
+    public void removeEffects(Player player, boolean remove) {
+        for (OrbModifier modifier : orb.getModifiers()) {
+            modifier.clear(player);
+        }
+
+        player.removeMetadata(owner.getUniqueId().toString(), WyvenItems.instance.getPlugin().getPlugin());
+        if (remove) applied.remove(player);
     }
 }

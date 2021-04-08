@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.*;
 
@@ -24,8 +25,8 @@ public class OrbListener implements Listener {
         this.itemManager = itemManager;
     }
 
-    public static final Map<Player, Map<Orb, Long>> orbCooldown = new HashMap<>();
-    public static final List<UUID> activeOrb = new ArrayList<>();
+    public static final Map<UUID, LinkedHashMap<Orb, Long>> orbCooldown = new HashMap<>();
+    public static final Map<UUID, SpawnedOrb> activeOrb = new HashMap<>();
 
     @EventHandler
     public void onPlaceOrb(PlayerInteractEvent event) {
@@ -33,11 +34,14 @@ public class OrbListener implements Listener {
             Player player = event.getPlayer();
             if (itemManager.holdingItem(player, ItemType.ORB, false)) {
                 event.setCancelled(true);
-                if (activeOrb.contains(player.getUniqueId())) {
+
+                // Check to see if the player is already having an active orb
+                if (activeOrb.containsKey(player.getUniqueId())) {
                     player.sendMessage("You can only have 1 orb active at a time!");
                     return;
                 }
 
+                // Check to see if blocks are blocking the orb
                 Block block = event.getClickedBlock();
                 boolean isBlocked = false;
                 for (int i = 1; i <= 2; i++) {
@@ -53,23 +57,38 @@ public class OrbListener implements Listener {
                     return;
                 }
 
+                // Get the orb from player's hand
                 Orb orb = (Orb) itemManager.getCustomItem(player.getInventory().getItemInMainHand(), ItemType.ORB);
 
-                if (orbCooldown.containsKey(player)) {
-                    if (orbCooldown.get(player).containsKey(orb)) {
-                        double cooldown = orb.getCooldown() - orbCooldown.get(player).get(orb);
+                // Check if orb is on cooldown
+                if (orbCooldown.containsKey(player.getUniqueId())) {
+                    if (orbCooldown.get(player.getUniqueId()).containsKey(orb)) {
+                        double cooldown = orb.getCooldown() - orbCooldown.get(player.getUniqueId()).get(orb);
                         player.sendMessage("cooldown for another " + cooldown + " seconds");
                         return;
                     }
                 }
 
-                activeOrb.add(player.getUniqueId());
-                Map<Orb, Long> cooldown = new HashMap<Orb, Long>() {{
-                    put(orb, System.currentTimeMillis());
-                }};
-                orbCooldown.put(player, cooldown);
+                // Start cooldown
+                LinkedHashMap<Orb, Long> cooldown = orbCooldown.getOrDefault(player.getUniqueId(), new LinkedHashMap<>());
+                cooldown.put(orb, System.currentTimeMillis());
+                orbCooldown.put(player.getUniqueId(), cooldown);
 
-                new SpawnedOrb(orb, player, event.getClickedBlock().getLocation());
+                // Activate orb
+                activeOrb.put(
+                        player.getUniqueId(),
+                        new SpawnedOrb(orb, player, event.getClickedBlock().getLocation())
+                );
+            }
+        }
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        for (Map.Entry<UUID, SpawnedOrb> entry : activeOrb.entrySet()) {
+            if (player.hasMetadata(entry.getKey().toString())) {
+                entry.getValue().removeEffects(player, true);
             }
         }
     }

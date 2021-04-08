@@ -5,8 +5,10 @@ import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.*;
 import com.wyvencraft.items.enums.ItemType;
+import com.wyvencraft.items.utils.Debug;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
+import io.github.portlek.bukkititembuilder.SkullItemBuilder;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -116,16 +118,17 @@ public class ItemManager {
 
                 switch (type) {
                     case ORB:
-                        if (!itemsFile.contains("items." + name + ".orb")) {
+                        ConfigurationSection orbSection = itemsFile.getConfigurationSection("items." + name + ".orb");
+
+                        if (orbSection == null) {
                             plugin.getLogger().warning("'items." + name + "' in items.yml has type 'ORB', but no orb-section!");
                             continue;
                         }
 
-                        ConfigurationSection orbSection = itemsFile.getConfigurationSection("items." + name + ".orb");
-
                         ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
                                 .skull()
-                                .owner(orbSection.getString("skull", "STEVE")).itemStack();
+                                .owner(orbSection.getString("skull", "STEVE"))
+                                .itemStack();
 
                         int radius = orbSection.getInt("radius", 3);
                         double aliveTime = orbSection.getDouble("aliveTime", 8);
@@ -251,8 +254,12 @@ public class ItemManager {
 
         ItemStackBuilder builder;
         if (materialStr.startsWith("skin-")) {
-            String owner = materialStr.split("-", 2)[1];
-            ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD).skull().owner("Steve").itemStack();
+            String owner = materialStr.split("-")[1];
+            Debug.log("Owner: " + owner);
+            ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
+                    .skull()
+                    .owner("Steve")
+                    .itemStack();
             builder = ItemStackBuilder.from(skull);
         } else {
             final Material material = Material.getMaterial(materialStr.toUpperCase());
