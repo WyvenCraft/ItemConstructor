@@ -7,14 +7,11 @@ import com.wyvencraft.items.data.ArmorSet;
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.events.FullSetBuffEvent;
 import com.wyvencraft.items.events.FullSetDebuffEvent;
-import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 public class ArmorSetListener implements Listener {
 
@@ -29,7 +26,7 @@ public class ArmorSetListener implements Listener {
     @EventHandler
     public void onEquipArmor(PlayerArmorChangeEvent e) {
         if (e.getNewItem() != null && e.getNewItem().getType() != Material.AIR) {
-            if (!addon.getItemManager().isCustomItem(e.getNewItem())) return;
+            if (addon.getItemManager().isCustomItem(e.getNewItem())) return;
 
             ArmorPiece armorPiece = addon.getItemManager().getArmorPiece(e.getNewItem());
             if (armorPiece == null) return;
@@ -57,7 +54,7 @@ public class ArmorSetListener implements Listener {
     @EventHandler
     public void onUnEquipArmor(PlayerArmorChangeEvent e) {
         if (e.getOldItem() != null && e.getOldItem().getType() != Material.AIR) {
-            if (!addon.getItemManager().isCustomItem(e.getOldItem())) return;
+            if (addon.getItemManager().isCustomItem(e.getOldItem())) return;
 
             ArmorPiece armorPiece = addon.getItemManager().getArmorPiece(e.getOldItem());
             if (armorPiece == null) return;

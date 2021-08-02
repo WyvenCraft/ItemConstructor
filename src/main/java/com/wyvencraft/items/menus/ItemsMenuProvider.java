@@ -22,24 +22,24 @@ import java.util.stream.Collectors;
 public class ItemsMenuProvider implements InventoryProvider {
 
     public enum GuiItem {
-        BORDER_ITEM(ItemStackBuilder.from(Material.GRAY_STAINED_GLASS_PANE).name(" "), ItemType.NULL),
-        HELMET_ITEM(ItemStackBuilder.from(Material.DIAMOND_HELMET).name("&eHelmets", true), ItemType.HELMET, SlotPos.of(1, 1)),
-        CHESTPLATES_ITEM(ItemStackBuilder.from(Material.DIAMOND_CHESTPLATE).name("&eChestplates", true), ItemType.CHESTPLATE, SlotPos.of(2, 1)),
-        LEGGINGS_ITEM(ItemStackBuilder.from(Material.DIAMOND_LEGGINGS).name("&eLeggings", true), ItemType.LEGGING, SlotPos.of(3, 1)),
-        BOOTS_ITEM(ItemStackBuilder.from(Material.DIAMOND_BOOTS).name("&eBoots", true), ItemType.BOOTS, SlotPos.of(4, 1)),
-        COMBAT_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_SWORD).name("&eCombat", true), ItemType.COMBAT, SlotPos.of(1, 0)),
-        TOOL_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_PICKAXE).name("&eTools", true), ItemType.TOOL, SlotPos.of(2, 0)),
-        ARCHERY_ITEMS_ITEM(ItemStackBuilder.from(Material.BOW).name("&eLong", true), ItemType.ARCHERY, SlotPos.of(3, 0)),
-        OFFHAND_ITEMS_ITEM(ItemStackBuilder.from(Material.TOTEM_OF_UNDYING).name("&eOff Hand", true), ItemType.OFFHAND, SlotPos.of(4, 0)),
-        NEXT_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).name("&a&lNext Page >>", true), ItemType.NULL),
-        PREVIOUS_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).name("&c&l<< Previous Page", true), ItemType.NULL);
+        BORDER_ITEM(ItemStackBuilder.from(Material.GRAY_STAINED_GLASS_PANE).setName(" "), ItemType.NULL),
+        HELMET_ITEM(ItemStackBuilder.from(Material.DIAMOND_HELMET).setName("&eHelmets", true), ItemType.HELMET, SlotPos.of(1, 1)),
+        CHESTPLATES_ITEM(ItemStackBuilder.from(Material.DIAMOND_CHESTPLATE).setName("&eChestplates", true), ItemType.CHESTPLATE, SlotPos.of(2, 1)),
+        LEGGINGS_ITEM(ItemStackBuilder.from(Material.DIAMOND_LEGGINGS).setName("&eLeggings", true), ItemType.LEGGING, SlotPos.of(3, 1)),
+        BOOTS_ITEM(ItemStackBuilder.from(Material.DIAMOND_BOOTS).setName("&eBoots", true), ItemType.BOOTS, SlotPos.of(4, 1)),
+        COMBAT_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_SWORD).setName("&eCombat", true), ItemType.COMBAT, SlotPos.of(1, 0)),
+        TOOL_ITEMS_ITEM(ItemStackBuilder.from(Material.DIAMOND_PICKAXE).setName("&eTools", true), ItemType.TOOL, SlotPos.of(2, 0)),
+        ARCHERY_ITEMS_ITEM(ItemStackBuilder.from(Material.BOW).setName("&eLong", true), ItemType.ARCHERY, SlotPos.of(3, 0)),
+        OFFHAND_ITEMS_ITEM(ItemStackBuilder.from(Material.TOTEM_OF_UNDYING).setName("&eOff Hand", true), ItemType.OFFHAND, SlotPos.of(4, 0)),
+        NEXT_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).setName("&a&lNext Page >>", true), ItemType.NULL),
+        PREVIOUS_PAGE_ITEM(ItemStackBuilder.from(Material.POLISHED_BLACKSTONE_BUTTON).setName("&c&l<< Previous Page", true), ItemType.NULL);
 
         ItemStack stack;
         SlotPos slotPos;
         ItemType type;
 
         GuiItem(ItemStackBuilder builder, ItemType type, SlotPos... slotPos) {
-            this.stack = builder.flag(ItemFlag.HIDE_ATTRIBUTES).itemStack();
+            this.stack = builder.addFlag(ItemFlag.HIDE_ATTRIBUTES).getItemStack();
             Arrays.stream(slotPos).findFirst().ifPresent(s -> this.slotPos = s);
             this.type = type;
         }
@@ -84,7 +84,7 @@ public class ItemsMenuProvider implements InventoryProvider {
                         .filter(i -> i.getType() == category.type)
                         .collect(Collectors.toList()));
 
-                e.contents().set(category.getSlotPos(), Icon.click(ItemStackBuilder.from(category.getStack().clone()).glow().itemStack(), e1 -> {
+                e.contents().set(category.getSlotPos(), Icon.click(ItemStackBuilder.from(category.getStack().clone()).addGlowEffect().getItemStack(), e1 -> {
                     // RESET FILTER IF CLICKED ON SELECTED
                     if (selected.get(player.getUniqueId()).equals(category.getSlotPos())) {
                         selected.remove(player.getUniqueId());

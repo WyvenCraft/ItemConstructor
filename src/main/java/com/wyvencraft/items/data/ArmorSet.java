@@ -27,7 +27,7 @@ public class ArmorSet {
         int wearingPieces = 0;
         for (ItemStack armorPiece : player.getInventory().getArmorContents()) {
 
-            PersistentDataContainer pdc = ItemStackBuilder.from(armorPiece).meta().getPersistentDataContainer();
+            PersistentDataContainer pdc = ItemStackBuilder.from(armorPiece).getItemMeta().getPersistentDataContainer();
             if (!pdc.has(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING)) continue;
             String piece = pdc.get(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING);
 

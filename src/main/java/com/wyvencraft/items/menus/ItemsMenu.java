@@ -1,5 +1,6 @@
 package com.wyvencraft.items.menus;
 
+
 import io.github.portlek.smartinventory.InventoryProvider;
 import io.github.portlek.smartinventory.Page;
 import io.github.portlek.smartinventory.SmartInventory;

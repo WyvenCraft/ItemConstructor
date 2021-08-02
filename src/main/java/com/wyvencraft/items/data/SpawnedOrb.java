@@ -32,7 +32,6 @@ public class SpawnedOrb implements Listener {
 
     private final Set<Player> applied = new HashSet<>();
 
-
     public SpawnedOrb(Orb orb, Player owner, Location location) {
         this.orb = orb;
         this.owner = owner;

@@ -8,7 +8,8 @@ import com.wyvencraft.items.enums.ItemType;
 import com.wyvencraft.items.utils.Debug;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
-import io.github.portlek.bukkititembuilder.SkullItemBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -25,6 +26,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ItemManager {
@@ -60,13 +62,13 @@ public class ItemManager {
 
                 EquipmentSlot slot = getEquipmentSlot(name);
 
-                ItemType type = getItemType(itemsFile.getString("items." + name + ".type", "NULL"), builder.itemStack().getType());
+                ItemType type = getItemType(itemsFile.getString("items." + name + ".type", "NULL"), builder.getItemStack().getType());
                 if (type == null) {
                     plugin.getLogger().warning("'items." + name + ".type' in items.yml doesnt exist");
                     continue;
                 }
 
-                builder.update(meta -> meta.getPersistentDataContainer().set(WyvenItems.ITEM_TYPE, PersistentDataType.STRING, type.name()));
+                builder.getItemMeta().getPersistentDataContainer().set(WyvenItems.ITEM_TYPE, PersistentDataType.STRING, type.name());
 
                 // Setup stat attributes
                 ConfigurationSection statsSection = itemsSection.getConfigurationSection(name + ".stats");
@@ -93,10 +95,15 @@ public class ItemManager {
                     }
 
                     if (!statsLoreSection.isEmpty()) {
-                        List<String> oldLore = Optional.ofNullable(builder.meta().getLore()).orElse(new ArrayList<>());
-                        statsLoreSection.addAll(oldLore);
+                        final var serializer = PlainTextComponentSerializer.plainText();
+                        final List<Component> statsLore = Objects.requireNonNull(statsLoreSection)
+                                .stream()
+                                .map(serializer::deserialize)
+                                .collect(Collectors.toList());
 
-                        builder.lore(statsLoreSection, true);
+                        statsLore.addAll(Objects.requireNonNullElse(builder.getItemMeta().lore(), new ArrayList<>()));
+
+                        builder.getItemMeta().lore(statsLore);
                     }
                 }
 
@@ -106,7 +113,7 @@ public class ItemManager {
                 if (recipeEnabled) {
                     final ConfigurationSection recipeSection = itemsSection.getConfigurationSection(name + ".recipe.shape");
                     if (recipeSection != null) {
-                        recipe = createRecipe(recipeSection, builder.itemStack());
+                        recipe = createRecipe(recipeSection, builder.getItemStack());
                     } else {
                         plugin.getLogger().warning(name + " has recipes enabled, but missing 'recipe.shape'-section");
                         continue;
@@ -114,7 +121,7 @@ public class ItemManager {
                 }
 
                 final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
-                Item item = new Item(name, builder.itemStack(), itemKey, recipe, type);
+                Item item = new Item(name, builder.getItemStack(), itemKey, recipe, type);
 
                 switch (type) {
                     case ORB:
@@ -126,9 +133,9 @@ public class ItemManager {
                         }
 
                         ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
-                                .skull()
-                                .owner(orbSection.getString("skull", "STEVE"))
-                                .itemStack();
+                                .asSkull()
+                                .setOwner(orbSection.getString("skull", "STEVE"))
+                                .getItemStack();
 
                         int radius = orbSection.getInt("radius", 3);
                         double aliveTime = orbSection.getDouble("aliveTime", 8);
@@ -257,9 +264,9 @@ public class ItemManager {
             String owner = materialStr.split("-")[1];
             Debug.log("Owner: " + owner);
             ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
-                    .skull()
-                    .owner("Steve")
-                    .itemStack();
+                    .asSkull()
+                    .setOwner(owner)
+                    .getItemStack();
             builder = ItemStackBuilder.from(skull);
         } else {
             final Material material = Material.getMaterial(materialStr.toUpperCase());
@@ -272,26 +279,32 @@ public class ItemManager {
 
             if (material.name().startsWith("LEATHER_")) {
                 if (section.contains("color")) {
-                    final LeatherArmorMeta meta = (LeatherArmorMeta) builder.meta();
+                    final LeatherArmorMeta meta = (LeatherArmorMeta) builder.getItemMeta();
                     meta.setColor(Utils.hexToRgb(section.getString("color")));
                 }
             }
         }
 
-        builder.flag(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE);
+        builder.addFlag(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DYE);
 
         final String name = section.getString("name");
 
-        if (name != null) builder.name(name, true);
+        if (name != null) builder.setName(name, true);
 
         if (section.contains("enchants")) {
-            builder.enchantments(String.valueOf(section.getStringList("enchants")));
+            builder.addEnchantments(String.valueOf(section.getStringList("enchants")));
         }
 
         final List<String> lore = section.getStringList("lore");
 
-        builder.lore(lore, true);
-        builder.update(meta -> meta.getPersistentDataContainer().set(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING, key));
+        final var serializer = PlainTextComponentSerializer.plainText();
+        final List<Component> finalLore = Objects.requireNonNull(lore)
+                .stream()
+                .map(serializer::deserialize)
+                .collect(Collectors.toList());
+
+        builder.getItemMeta().lore(finalLore);
+        builder.getItemMeta().getPersistentDataContainer().set(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING, key);
 
         return builder;
     }
@@ -304,7 +317,7 @@ public class ItemManager {
             return false;
 
         ItemStack holding = checkOffHand && mainHand.getType() == Material.AIR ? offHand : mainHand;
-        if (!isCustomItem(holding)) return false;
+        if (isCustomItem(holding)) return false;
 
         ItemType itemType = ItemType.valueOf(holding.getItemMeta().getPersistentDataContainer().get(WyvenItems.ITEM_TYPE, PersistentDataType.STRING));
 
@@ -358,7 +371,7 @@ public class ItemManager {
     }
 
     public Item getCustomItem(ItemStack stack, ItemType type) {
-        if (!isCustomItem(stack)) return null;
+        if (isCustomItem(stack)) return null;
 
         return getCustomItem(stack.getItemMeta().getPersistentDataContainer().get(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING), type);
     }
