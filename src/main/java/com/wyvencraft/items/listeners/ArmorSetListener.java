@@ -1,10 +1,9 @@
 package com.wyvencraft.items.listeners;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import com.wyvencraft.api.integration.WyvenAPI;
+import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.ArmorPiece;
 import com.wyvencraft.items.data.ArmorSet;
-import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.events.FullSetBuffEvent;
 import com.wyvencraft.items.events.FullSetDebuffEvent;
 import org.bukkit.Bukkit;
@@ -15,12 +14,12 @@ import org.bukkit.event.Listener;
 
 public class ArmorSetListener implements Listener {
 
-    WyvenItems addon;
-    WyvenAPI plugin;
+    private final WyvenItems addon;
+//    private WyvenAPI plugin;
 
     public ArmorSetListener(WyvenItems addon) {
         this.addon = addon;
-        plugin = addon.getPlugin();
+//        this.plugin = addon.getPlugin();
     }
 
     @EventHandler
@@ -33,6 +32,7 @@ public class ArmorSetListener implements Listener {
 
             if (!armorPiece.getBonusAttributes().isEmpty()) {
                 // Apply attributes
+                e.getPlayer().sendMessage("[DEBUG] Applied piece attributes");
             }
 
             ArmorSet set = addon.getItemManager().getArmorSet(armorPiece.getItem().getName());
@@ -44,7 +44,7 @@ public class ArmorSetListener implements Listener {
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         // Apply set bonus
-                        player.sendMessage("Applied set bonus");
+                        player.sendMessage("[DEBUG] Applied set bonus");
                     }
                 }
             }
@@ -61,6 +61,7 @@ public class ArmorSetListener implements Listener {
 
             if (!armorPiece.getBonusAttributes().isEmpty()) {
                 // Remove piece attributes
+                e.getPlayer().sendMessage("[DEBUG] Removed piece attributes");
             }
 
             ArmorSet set = addon.getItemManager().getArmorSet(armorPiece.getItem().getName());
@@ -72,7 +73,7 @@ public class ArmorSetListener implements Listener {
                     Bukkit.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         // Debuff bonus attributes
-                        player.sendMessage("Set bonus Debuff");
+                        player.sendMessage("[DEBUG] Set bonus Debuff");
                     }
                 }
             }
