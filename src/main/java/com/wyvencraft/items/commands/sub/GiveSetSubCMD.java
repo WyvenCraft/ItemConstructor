@@ -1,9 +1,9 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.utils.MessageUtil;
-import com.wyvencraft.items.data.ArmorSet;
+import com.wyvencraft.api.utils.Text;
 import com.wyvencraft.items.WyvenItems;
+import com.wyvencraft.items.data.ArmorSet;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,12 +25,12 @@ public class GiveSetSubCMD extends SubCommand {
         ArmorSet armorSet;
 
         if (args.length == 0) {
-            sender.sendMessage(MessageUtil.color("&cUsage: /wi giveset <set> [player]"));
+            sender.sendMessage(Text.color("&cUsage: /wi giveset <set> [player]"));
             return;
         }
 
         if (addon.getItemManager().getArmorSetFromID(args[0]) == null) {
-            getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[0]));
+            getPlugin().getLanguageManager().sendMessage(sender, "ITEMS.INVALID_ARMOR_SET", r -> r.replace("{0}", args[0]));
             return;
         }
 
@@ -39,13 +39,13 @@ public class GiveSetSubCMD extends SubCommand {
         if (args.length >= 2) {
             target = Bukkit.getPlayer(args[1]);
             if (target == null) {
-                getPlugin().getLangManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
+                getPlugin().getLanguageManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
                 return;
             }
         }
 
         if (target == null) {
-            getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
+            getPlugin().getLanguageManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
             return;
         }
 

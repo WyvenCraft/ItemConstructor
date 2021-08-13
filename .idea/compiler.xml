@@ -11,7 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ItemConstructor" target="1.8" />
-      <module name="WyvenItems" target="13" />
+      <module name="WyvenItems" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

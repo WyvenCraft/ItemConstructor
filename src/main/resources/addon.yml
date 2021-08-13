@@ -1,7 +1,7 @@
-name: ${project.name}
+name: "WyvenItems"
 display-name: "Wyven Items"
 description: "An addon that lets you create new custom items, with custom recipes and equip/unequip events and more"
 
 main: "com.wyvencraft.items.WyvenItems"
 author: "6u5t4v"
-version: ${project.version}
+version: "1.0.0"

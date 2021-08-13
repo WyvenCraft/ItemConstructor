@@ -1,7 +1,7 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.managers.ILangManager;
+import com.wyvencraft.api.managers.LanguageManager;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.command.CommandSender;
 
@@ -14,7 +14,7 @@ public class HelpSubCMD extends SubCommand {
 
     @Override
     protected void handleCommand(CommandSender sender, String[] strings) {
-        final ILangManager lang = getPlugin().getLangManager();
+        final LanguageManager lang = getPlugin().getLanguageManager();
         final String helpMessage = lang.getMessage("ITEMS.HELP");
         String[] message = helpMessage.split(Pattern.quote("\n"));
         lang.sendMessage(sender, message);

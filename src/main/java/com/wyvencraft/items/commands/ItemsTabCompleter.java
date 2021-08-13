@@ -1,9 +1,8 @@
 package com.wyvencraft.items.commands;
 
 
-import com.wyvencraft.api.integration.WyvenAPI;
-import com.wyvencraft.items.data.Item;
 import com.wyvencraft.items.WyvenItems;
+import com.wyvencraft.items.data.Item;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -19,11 +18,9 @@ public class ItemsTabCompleter implements TabCompleter {
     List<String> items = new ArrayList<>();
 
     WyvenItems addon;
-    WyvenAPI plugin;
 
     public ItemsTabCompleter(WyvenItems addon) {
         this.addon = addon;
-        plugin = addon.getPlugin();
     }
 
     @Override

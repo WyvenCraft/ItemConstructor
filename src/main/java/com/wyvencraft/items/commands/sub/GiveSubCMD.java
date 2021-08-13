@@ -1,7 +1,7 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.utils.MessageUtil;
+import com.wyvencraft.api.utils.Text;
 import com.wyvencraft.items.data.Item;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Bukkit;
@@ -26,12 +26,12 @@ public class GiveSubCMD extends SubCommand {
         int amount = 1;
 
         if (args.length == 0) {
-            sender.sendMessage(MessageUtil.color("&cUsage: /wi give <item> [player] [amount]"));
+            sender.sendMessage(Text.color("&cUsage: /wi give <item> [player] [amount]"));
             return;
         }
 
         if (addon.getItemManager().getCustomItem(args[0]) == null) {
-            getPlugin().getLangManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[0]));
+            getPlugin().getLanguageManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[0]));
             return;
         }
 
@@ -40,13 +40,13 @@ public class GiveSubCMD extends SubCommand {
         if (args.length >= 2) {
             giveTarget = Bukkit.getPlayer(args[1]);
             if (giveTarget == null) {
-                getPlugin().getLangManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
+                getPlugin().getLanguageManager().sendMessage(sender, "INVALID_PLAYER", r -> r.replace("{0}", args[1]));
                 return;
             }
         }
 
         if (giveTarget == null) {
-            getPlugin().getLangManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
+            getPlugin().getLanguageManager().sendMessage(sender, "MISSING_TARGET", r -> r.replace("{0}", "(players only)"));
             return;
         }
 
@@ -54,7 +54,7 @@ public class GiveSubCMD extends SubCommand {
             try {
                 amount = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                getPlugin().getLangManager().sendMessage(sender, "INVALID_NUMBER", r -> r.replace("{0}", args[2]));
+                getPlugin().getLanguageManager().sendMessage(sender, "INVALID_NUMBER", r -> r.replace("{0}", args[2]));
                 return;
             }
 

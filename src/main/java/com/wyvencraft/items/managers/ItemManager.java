@@ -1,11 +1,9 @@
 package com.wyvencraft.items.managers;
 
 
-import com.wyvencraft.api.integration.WyvenAPI;
 import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.data.*;
 import com.wyvencraft.items.enums.ItemType;
-import com.wyvencraft.items.utils.Debug;
 import com.wyvencraft.items.utils.Utils;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import net.kyori.adventure.text.Component;
@@ -31,7 +29,6 @@ import java.util.stream.Stream;
 
 public class ItemManager {
     private final WyvenItems addon;
-    private final WyvenAPI plugin;
 
     private final NamespacedKey HELMET_KEY;
 
@@ -41,13 +38,12 @@ public class ItemManager {
 
     public ItemManager(WyvenItems addon) {
         this.addon = addon;
-        this.plugin = addon.getPlugin();
 
-        HELMET_KEY = new NamespacedKey(plugin.getPlugin(), "helmet");
+        HELMET_KEY = new NamespacedKey(addon.getPlugin().getPlugin(), "helmet");
     }
 
     public void loadItems() {
-        FileConfiguration itemsFile = addon.getConfig("items.yml");
+        FileConfiguration itemsFile = addon.getConfigurationManager().get("items.yml");
         ConfigurationSection itemsSection = itemsFile.getConfigurationSection("items");
 
         customItems.clear();
@@ -64,7 +60,7 @@ public class ItemManager {
 
                 ItemType type = getItemType(itemsFile.getString("items." + name + ".type", "NULL"), builder.getItemStack().getType());
                 if (type == null) {
-                    plugin.getLogger().warning("'items." + name + ".type' in items.yml doesnt exist");
+                    addon.getLogger().warning("'items." + name + ".type' in items.yml doesnt exist");
                     continue;
                 }
 
@@ -115,12 +111,12 @@ public class ItemManager {
                     if (recipeSection != null) {
                         recipe = createRecipe(recipeSection, builder.getItemStack());
                     } else {
-                        plugin.getLogger().warning(name + " has recipes enabled, but missing 'recipe.shape'-section");
+                        addon.getLogger().warning(name + " has recipes enabled, but missing 'recipe.shape'-section");
                         continue;
                     }
                 }
 
-                final NamespacedKey itemKey = new NamespacedKey(plugin.getPlugin(), name.toLowerCase());
+                final NamespacedKey itemKey = new NamespacedKey(addon.getPlugin().getPlugin(), name.toLowerCase());
                 Item item = new Item(name, builder.getItemStack(), itemKey, recipe, type);
 
                 switch (type) {
@@ -128,7 +124,7 @@ public class ItemManager {
                         ConfigurationSection orbSection = itemsFile.getConfigurationSection("items." + name + ".orb");
 
                         if (orbSection == null) {
-                            plugin.getLogger().warning("'items." + name + "' in items.yml has type 'ORB', but no orb-section!");
+                            addon.getLogger().warning("'items." + name + "' in items.yml has type 'ORB', but no orb-section!");
                             continue;
                         }
 
@@ -166,7 +162,7 @@ public class ItemManager {
                                 try {
                                     target = OrbModifier.OrbTarget.valueOf(targetStr);
                                 } catch (IllegalArgumentException e) {
-                                    plugin.getLogger().warning(targetStr + " is an invalid OrbTarget use 'FRIENDLY', 'NEUTRAL', 'ENEMY'");
+                                    addon.getLogger().warning(targetStr + " is an invalid OrbTarget use 'FRIENDLY', 'NEUTRAL', 'ENEMY'");
                                     continue;
                                 }
 
@@ -190,7 +186,7 @@ public class ItemManager {
         try {
             return Attribute.valueOf("GENERIC_" + attrName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            plugin.getLogger().warning(attrName + " is not a valid attribute");
+            addon.getLogger().warning(attrName + " is not a valid attribute");
             return null;
         }
     }
@@ -229,7 +225,7 @@ public class ItemManager {
         for (String raw : recipeSection.getKeys(false)) {
             final int slot = Utils.getInteger(raw);
             if (slot == -1) {
-                plugin.getLogger().severe(raw + " has to be a number (0-8).");
+                addon.getLogger().severe(raw + " has to be a number (0-8).");
                 return null;
             }
 
@@ -244,7 +240,7 @@ public class ItemManager {
 
             } catch (IllegalArgumentException e) {
                 // TODO check if its a custom item
-                plugin.getLogger().severe(ingredStr[0] + " is invalid material");
+                addon.getLogger().severe(ingredStr[0] + " is invalid material");
                 continue;
             }
 
@@ -262,7 +258,6 @@ public class ItemManager {
         ItemStackBuilder builder;
         if (materialStr.startsWith("skin-")) {
             String owner = materialStr.split("-")[1];
-            Debug.log("Owner: " + owner);
             ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
                     .asSkull()
                     .setOwner(owner)
@@ -271,7 +266,7 @@ public class ItemManager {
         } else {
             final Material material = Material.getMaterial(materialStr.toUpperCase());
             if (material == null) {
-                plugin.getLogger().warning("Missing material: " + section.getName());
+                addon.getLogger().warning("Missing material: " + section.getName());
                 return null;
             }
 
