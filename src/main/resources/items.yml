@@ -88,7 +88,6 @@ ARMOR_SETS:
 
 items:
   OVERFLUX_ORB:
-    type: ORB
     item:
       material: "skin-eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzZkZDc3Mjc0ZGQ1ZDRkYWMwMzhkNmViN2E2ZDlhYWMzNmExOWNlN2RkNTM0MTk2NDAyMmFmYjViNmNmZGExZSJ9fX0="
       name: "&5Overflux"

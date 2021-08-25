@@ -1,6 +1,5 @@
 package com.wyvencraft.items.utils;
 
-import com.wyvencraft.items.WyvenItems;
 import org.bukkit.Color;
 
 public class Utils {

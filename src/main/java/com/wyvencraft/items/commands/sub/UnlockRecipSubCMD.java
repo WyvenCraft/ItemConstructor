@@ -56,7 +56,7 @@ public class UnlockRecipSubCMD extends SubCommand {
 
         // UNLOCK RECIPE
         if (!target.hasDiscoveredRecipe(item.getKey()))
-            addon.getItemManager().unlockRecipe(target, item);
+            addon.getRecipeManager().unlockRecipe(target, item);
         else {
             final String targetName = target.getName();
             getPlugin().getLanguageManager().sendMessage(target, Message.ALREADY_UNLOCKED_MESSAGE.getPath(), r -> r.replace("{0}", args[1]).replace("{1}", targetName));

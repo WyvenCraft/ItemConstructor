@@ -1,10 +1,18 @@
 package com.wyvencraft.items.managers;
 
 
+import com.wyvencraft.api.language.LanguageManager;
 import com.wyvencraft.items.WyvenItems;
-import com.wyvencraft.items.data.*;
+import com.wyvencraft.items.data.ArmorPiece;
+import com.wyvencraft.items.data.ArmorSet;
+import com.wyvencraft.items.data.Item;
+import com.wyvencraft.items.data.ItemRecipe;
+import com.wyvencraft.items.enums.Category;
 import com.wyvencraft.items.enums.ItemType;
+import com.wyvencraft.items.orbs.Orb;
+import com.wyvencraft.items.orbs.OrbModifier;
 import com.wyvencraft.items.utils.Utils;
+import com.wyvencraft.items.utils.Validator;
 import io.github.portlek.bukkititembuilder.ItemStackBuilder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -20,47 +28,48 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.*;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ItemManager {
     private final WyvenItems addon;
-
-    private final NamespacedKey HELMET_KEY;
+    private final LanguageManager lang;
+    private final RecipeManager recipeManager;
 
     public List<Item> customItems = new ArrayList<>();
     public List<ArmorSet> armorSets = new ArrayList<>();
     public List<ArmorPiece> armorPieces = new ArrayList<>();
 
-    public ItemManager(WyvenItems addon) {
+    public ItemManager(WyvenItems addon, LanguageManager lang, RecipeManager recipeManager) {
         this.addon = addon;
-
-        HELMET_KEY = new NamespacedKey(addon.getPlugin().getPlugin(), "helmet");
+        this.lang = lang;
+        this.recipeManager = recipeManager;
     }
 
     public void loadItems() {
-        FileConfiguration itemsFile = addon.getConfigurationManager().get("items.yml");
-        ConfigurationSection itemsSection = itemsFile.getConfigurationSection("items");
-
         customItems.clear();
         armorSets.clear();
         armorPieces.clear();
 
+        FileConfiguration itemsFile = addon.getConfigurationManager().get("items.yml");
+        ConfigurationSection itemsSection = itemsFile.getConfigurationSection("items");
         if (itemsSection != null) {
             for (String name : itemsSection.getKeys(false)) {
                 ConfigurationSection itemSection = itemsSection.getConfigurationSection(name + ".item");
 
+                addon.getPlugin().printDebug(name);
+
                 ItemStackBuilder builder = getBuilder(itemSection, name);
 
-                EquipmentSlot slot = getEquipmentSlot(name);
+//                EquipmentSlot slot = getEquipmentSlot(name);
 
-                ItemType type = getItemType(itemsFile.getString("items." + name + ".type", "NULL"), builder.getItemStack().getType());
+                ItemType type = ItemType.matchType(name);
                 if (type == null) {
-                    addon.getLogger().warning("'items." + name + ".type' in items.yml doesnt exist");
+                    addon.getLogger().warning("'items." + name + "' in items.yml are missing a type");
                     continue;
                 }
 
@@ -72,22 +81,21 @@ public class ItemManager {
                     List<String> statsLoreSection = new ArrayList<>();
 
                     for (String attrName : statsSection.getKeys(false)) {
-                        Attribute attribute = validAttribute(attrName);
-                        if (attribute == null) {
-                            continue;
-                        }
+                        Attribute attribute = Validator.validateAttribute(attrName);
+                        if (attribute == null) continue;
 
                         final int amount = statsSection.getInt(attrName);
                         final double multiplier = (double) amount / 100;
-                        AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), attrName, multiplier, AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot);
+                        for (EquipmentSlot slot : type.getSlots()) {
+                            AttributeModifier modifier = new AttributeModifier(UUID.randomUUID(), attrName, multiplier, AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot);
+                            StringBuilder stat = new StringBuilder("&7" + WordUtils.capitalizeFully(attrName.replaceAll("_", " ")) + ": ");
+                            if (amount >= 0) stat.append("&a+");
+                            else stat.append("&c");
+                            stat.append(amount).append('%');
+                            statsLoreSection.add(stat.toString());
 
-                        StringBuilder stat = new StringBuilder("&7" + WordUtils.capitalizeFully(attrName.replaceAll("_", " ")) + ": ");
-                        if (amount >= 0) stat.append("&a+");
-                        else stat.append("&c");
-                        stat.append(amount).append('%');
-                        statsLoreSection.add(stat.toString());
-
-                        builder.addAttributeModifier(attribute, modifier);
+                            builder.addAttributeModifier(attribute, modifier);
+                        }
                     }
 
                     if (!statsLoreSection.isEmpty()) {
@@ -109,68 +117,63 @@ public class ItemManager {
                 if (recipeEnabled) {
                     final ConfigurationSection recipeSection = itemsSection.getConfigurationSection(name + ".recipe.shape");
                     if (recipeSection != null) {
-                        recipe = createRecipe(recipeSection, builder.getItemStack());
+                        recipe = recipeManager.createRecipe(recipeSection, builder.getItemStack());
                     } else {
                         addon.getLogger().warning(name + " has recipes enabled, but missing 'recipe.shape'-section");
                         continue;
                     }
                 }
 
+                // This NamespacedKey is used for adding crafting recipes
                 final NamespacedKey itemKey = new NamespacedKey(addon.getPlugin().getPlugin(), name.toLowerCase());
                 Item item = new Item(name, builder.getItemStack(), itemKey, recipe, type);
 
                 switch (type) {
                     case ORB:
-                        ConfigurationSection orbSection = itemsFile.getConfigurationSection("items." + name + ".orb");
-
-                        if (orbSection == null) {
-                            addon.getLogger().warning("'items." + name + "' in items.yml has type 'ORB', but no orb-section!");
-                            continue;
-                        }
+                        ConfigurationSection orbSection = Objects.requireNonNull(itemsFile.getConfigurationSection("items." + name + ".orb"),
+                                "'items." + name + "' in items.yml has type 'ORB', but no orb-section!");
 
                         ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
                                 .asSkull()
                                 .setOwner(orbSection.getString("skull", "STEVE"))
                                 .getItemStack();
 
-                        int radius = orbSection.getInt("radius", 3);
-                        double aliveTime = orbSection.getDouble("aliveTime", 8);
-                        double cooldown = orbSection.getDouble("cooldown", 30);
-
                         List<OrbModifier> orbModifiers = new ArrayList<>();
                         if (orbSection.contains("modifiers")) {
                             for (String id : orbSection.getConfigurationSection("modifiers").getKeys(false)) {
-                                AttributeModifier attribute = null;
+                                AttributeModifier attributeModifier = null;
                                 if (orbSection.contains("modifiers." + id + ".attribute")) {
                                     String[] attriStr = orbSection.getString("modifiers." + id + ".attribute").split(";", 2);
-                                    if (validAttribute(attriStr[0]) == null) continue;
+                                    Attribute attribute = Validator.validateAttribute(attriStr[0]);
+                                    if (attribute == null) continue;
                                     final double multiplier = (double) Utils.getInteger(attriStr[1]) / 100;
 
-                                    attribute = new AttributeModifier(UUID.randomUUID(), attriStr[0], multiplier, AttributeModifier.Operation.MULTIPLY_SCALAR_1, slot);
+                                    attributeModifier = new AttributeModifier(UUID.randomUUID(), attriStr[0], multiplier, AttributeModifier.Operation.MULTIPLY_SCALAR_1);
                                 }
 
 //                                PotionEffect potionEffect = null;
 //                                if (orbSection.contains("modifiers.potion")) {
 //                                    String[] attriStr = orbSection.getString("modifiers.potion").split(";", 2);
-//
 //                                }
 
                                 boolean onlyOnInit = orbSection.getBoolean("modifiers." + id + ".onlyInit", false);
 
                                 String targetStr = orbSection.getString("modifiers." + id + ".target", "FRIENDLY");
-                                OrbModifier.OrbTarget target;
-                                try {
-                                    target = OrbModifier.OrbTarget.valueOf(targetStr);
-                                } catch (IllegalArgumentException e) {
-                                    addon.getLogger().warning(targetStr + " is an invalid OrbTarget use 'FRIENDLY', 'NEUTRAL', 'ENEMY'");
-                                    continue;
+                                OrbModifier.OrbTarget target = Validator.validateOrbTarget(targetStr);
+                                if (target == null) {
+                                    addon.getLogger().log(Level.INFO, "Defaulting to FRIENDLY");
+                                    target = OrbModifier.OrbTarget.FRIENDLY;
                                 }
 
-                                orbModifiers.add(new OrbModifier(null, attribute, target, onlyOnInit));
+                                orbModifiers.add(new OrbModifier(null, attributeModifier, target, onlyOnInit));
                             }
                         }
 
-                        customItems.add(new Orb(item, skull, orbModifiers, radius, aliveTime, cooldown));
+                        final int radius = orbSection.getInt("radius", 3);
+                        final double aliveTime = orbSection.getDouble("aliveTime", 8);
+                        final double orbCooldown = orbSection.getDouble("cooldown", 30);
+
+                        customItems.add(new Orb(item, skull, orbModifiers, radius, aliveTime, orbCooldown));
                         break;
                     default:
                         customItems.add(item);
@@ -182,72 +185,10 @@ public class ItemManager {
         // LOAD ARMOR SETS
     }
 
-    private Attribute validAttribute(String attrName) {
-        try {
-            return Attribute.valueOf("GENERIC_" + attrName.toUpperCase());
-        } catch (IllegalArgumentException e) {
-            addon.getLogger().warning(attrName + " is not a valid attribute");
-            return null;
-        }
-    }
-
-    private ItemType getItemType(String value, Material material) {
-        try {
-            return ItemType.valueOf(value);
-        } catch (Exception e) {
-            if (material.name().endsWith("_HELMET")) return ItemType.HELMET;
-            else if (material.name().endsWith("_CHESTPLATE")) return ItemType.CHESTPLATE;
-            else if (material.name().endsWith("_LEGGINGS")) return ItemType.LEGGING;
-            else if (material.name().endsWith("_BOOTS")) return ItemType.BOOTS;
-            else if (material == Material.BOW || material == Material.CROSSBOW) return ItemType.ARCHERY;
-            else if (material.name().endsWith("_SWORD")) return ItemType.COMBAT;
-            else return null;
-        }
-    }
-
-    private EquipmentSlot getEquipmentSlot(String material) {
-        final String equipSlotStr = material.toUpperCase();
-
-        final EquipmentSlot slot;
-
-        if (equipSlotStr.endsWith("_HELMET")) slot = EquipmentSlot.HEAD;
-        else if (equipSlotStr.endsWith("_CHESTPLATE")) slot = EquipmentSlot.CHEST;
-        else if (equipSlotStr.endsWith("_LEGGINGS")) slot = EquipmentSlot.LEGS;
-        else if (equipSlotStr.endsWith("_BOOTS")) slot = EquipmentSlot.FEET;
-        else slot = null;
-
-        return slot;
-    }
-
-    public ItemRecipe createRecipe(ConfigurationSection recipeSection, ItemStack result) {
-        Map<Integer, ItemStack> recipe = new HashMap<>();
-
-        for (String raw : recipeSection.getKeys(false)) {
-            final int slot = Utils.getInteger(raw);
-            if (slot == -1) {
-                addon.getLogger().severe(raw + " has to be a number (0-8).");
-                return null;
-            }
-
-            ItemStack ingredient;
-
-            final String[] ingredStr = recipeSection.getString(raw).split(";", 2);
-            try {
-                final Material material = Material.valueOf(ingredStr[0]);
-                int amount = ingredStr.length > 1 ? Utils.getInteger(ingredStr[1]) : 1;
-
-                ingredient = new ItemStack(material, amount);
-
-            } catch (IllegalArgumentException e) {
-                // TODO check if its a custom item
-                addon.getLogger().severe(ingredStr[0] + " is invalid material");
-                continue;
-            }
-
-            recipe.put(slot, ingredient);
-        }
-
-        return new ItemRecipe(recipe, ItemRecipe.ShapeType.SHAPED, result);
+    public List<Item> getCategoryItems(Category category) {
+        return customItems.stream()
+                .filter(i -> i.getType().getCategory() == category)
+                .collect(Collectors.toList());
     }
 
     public ItemStackBuilder getBuilder(ConfigurationSection section, String key) {
@@ -258,12 +199,23 @@ public class ItemManager {
         ItemStackBuilder builder;
         if (materialStr.startsWith("skin-")) {
             String owner = materialStr.split("-")[1];
+
             ItemStack skull = ItemStackBuilder.from(Material.PLAYER_HEAD)
                     .asSkull()
                     .setOwner(owner)
                     .getItemStack();
-            builder = ItemStackBuilder.from(skull);
-        } else {
+            builder = ItemStackBuilder.from(Material.PLAYER_HEAD).setItemStack(skull);
+        }
+//        else if (materialStr.startsWith("hdb-")) {
+//            if (addon.isHookEnabled("HeadDatabase")) {
+//                String owner = materialStr.split("-")[1];
+//                if (addon.getHead(owner) != null) {
+//                    addon.getLogger().log(Level.INFO, "Using HeadDatabase 2");
+//                    builder = ItemStackBuilder.from(addon.getHead(owner));
+//                }
+//            }
+//        }
+        else {
             final Material material = Material.getMaterial(materialStr.toUpperCase());
             if (material == null) {
                 addon.getLogger().warning("Missing material: " + section.getName());
@@ -304,41 +256,24 @@ public class ItemManager {
         return builder;
     }
 
-    public boolean holdingItem(Player player, ItemType type, boolean checkOffHand) {
+    public boolean isItemOfType(Player player, ItemType type, boolean checkOffHand) {
         // Is player holding an item
         final ItemStack mainHand = player.getInventory().getItemInMainHand();
-        final ItemStack offHand = player.getInventory().getItemInOffHand();
-        if (!(checkOffHand ? (mainHand.getType() != Material.AIR) || (offHand.getType() != Material.AIR) : mainHand.getType() != Material.AIR))
-            return false;
 
-        ItemStack holding = checkOffHand && mainHand.getType() == Material.AIR ? offHand : mainHand;
+        ItemStack holding = checkOffHand && mainHand.getType() == Material.AIR ? player.getInventory().getItemInOffHand() : mainHand;
+        if (holding.getType() == Material.AIR || !holding.hasItemMeta()) return false;
         if (isCustomItem(holding)) return false;
 
-        ItemType itemType = ItemType.valueOf(holding.getItemMeta().getPersistentDataContainer().get(WyvenItems.ITEM_TYPE, PersistentDataType.STRING));
-
-        return type == itemType;
+        try {
+            ItemType itemType = ItemType.valueOf(holding.getItemMeta().getPersistentDataContainer().get(WyvenItems.ITEM_TYPE, PersistentDataType.STRING));
+            return type == itemType;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public boolean isCustomItem(ItemStack stack) {
         return stack.getItemMeta().getPersistentDataContainer().has(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING);
-    }
-
-    public void unlockRecipe(Player p, Item item) {
-        if (!p.discoverRecipe(item.getKey())) {
-            p.sendMessage(item.getName() + " recipe have already been unlocked");
-            return;
-        }
-
-        p.sendMessage("you have unlocked a new recipe for " + item.getName());
-    }
-
-    public void lockRecipe(Player p, Item item) {
-        if (!p.undiscoverRecipe(item.getKey())) {
-            p.sendMessage("You havent unlocked " + item.getName());
-            return;
-        }
-
-        p.sendMessage("you no longer have access to " + item.getName() + " recipe");
     }
 
     public void giveSet(Player p, ArmorSet set) {
@@ -414,18 +349,7 @@ public class ItemManager {
                 .orElse(null);
     }
 
-    public boolean isWearable(final ItemStack itemStack) {
-        String type = itemStack.getType().name();
-
-        PersistentDataContainer pdc = itemStack.getItemMeta().getPersistentDataContainer();
-
-        if (pdc.has(HELMET_KEY, PersistentDataType.STRING)) return true;
-        else {
-            return (type.endsWith("_HELMET") ||
-                    type.endsWith("_CHESTPLATE") ||
-                    type.endsWith("_LEGGINGS") ||
-                    type.endsWith("_BOOTS") ||
-                    type.equals("ELYTRA"));
-        }
+    public static boolean isAirOrNull(ItemStack stack) {
+        return stack == null || stack.getType() == Material.AIR;
     }
 }

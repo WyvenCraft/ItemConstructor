@@ -1,7 +1,7 @@
 package com.wyvencraft.items.commands.sub;
 
 import com.wyvencraft.api.commands.SubCommand;
-import com.wyvencraft.api.managers.LanguageManager;
+import com.wyvencraft.api.language.LanguageManager;
 import com.wyvencraft.items.WyvenItems;
 import org.bukkit.command.CommandSender;
 

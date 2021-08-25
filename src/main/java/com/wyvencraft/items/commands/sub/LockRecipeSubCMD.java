@@ -55,7 +55,7 @@ public class LockRecipeSubCMD extends SubCommand {
         }
 
         if (target.hasDiscoveredRecipe(item.getKey()))
-            addon.getItemManager().lockRecipe(target, item);
+            addon.getRecipeManager().lockRecipe(target, item);
         else {
             final String targetName = target.getName();
             getPlugin().getLanguageManager().sendMessage(sender, Message.NOT_UNLOCKED_MESSAGE.getPath(), r -> r.replace("{0}", args[1]).replace("{1}", targetName));
