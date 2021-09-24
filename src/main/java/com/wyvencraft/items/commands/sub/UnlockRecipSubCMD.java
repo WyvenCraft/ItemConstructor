@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 public class UnlockRecipSubCMD extends SubCommand {
     private final WyvenItems addon;
 
-    public UnlockRecipSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
-        super(addon.getPlugin(), name, permission, minArgs);
+    public UnlockRecipSubCMD(WyvenItems addon, String name, String permission, int minArgs, boolean playerCommand) {
+        super(addon.getPlugin(), name, permission, minArgs, playerCommand);
         this.addon = addon;
     }
 
@@ -29,7 +29,7 @@ public class UnlockRecipSubCMD extends SubCommand {
             return;
         }
 
-        item = addon.getItemManager().getCustomItem(args[0]);
+        item = addon.getItemManager().getItem(args[0]);
 
         if (item == null) {
             getPlugin().getLanguageManager().sendMessage(sender, Message.INVALID_ITEM_MESSAGE.getPath(), r -> r.replace("{0}", args[0]));

@@ -256,20 +256,29 @@ public class ItemManager {
         return builder;
     }
 
-    public boolean isItemOfType(Player player, ItemType type, boolean checkOffHand) {
-        // Is player holding an item
-        final ItemStack mainHand = player.getInventory().getItemInMainHand();
+    public boolean isItemOfType(ItemType type, ItemStack hand) {
 
-        ItemStack holding = checkOffHand && mainHand.getType() == Material.AIR ? player.getInventory().getItemInOffHand() : mainHand;
-        if (holding.getType() == Material.AIR || !holding.hasItemMeta()) return false;
-        if (isCustomItem(holding)) return false;
+        if (!isCustomItem(hand)) return false;
 
         try {
-            ItemType itemType = ItemType.valueOf(holding.getItemMeta().getPersistentDataContainer().get(WyvenItems.ITEM_TYPE, PersistentDataType.STRING));
+            ItemType itemType = ItemType.valueOf(hand.getItemMeta().getPersistentDataContainer().get(WyvenItems.ITEM_TYPE, PersistentDataType.STRING));
             return type == itemType;
         } catch (IllegalArgumentException e) {
             return false;
         }
+    }
+
+    public ItemStack getHand(Player player, boolean checkOffHand) {
+        final ItemStack mainHand = player.getInventory().getItemInMainHand();
+
+        // TODO It doesnt check the offhand if there is something in mainhand
+        ItemStack holding = checkOffHand && mainHand.getType() == Material.AIR
+                ? player.getInventory().getItemInOffHand()
+                : mainHand;
+
+        if (holding.getType() == Material.AIR || !holding.hasItemMeta()) return null;
+
+        return holding;
     }
 
     public boolean isCustomItem(ItemStack stack) {
@@ -300,22 +309,13 @@ public class ItemManager {
         }
     }
 
-    public Item getCustomItem(ItemStack stack, ItemType type) {
-        if (isCustomItem(stack)) return null;
-
-        return getCustomItem(stack.getItemMeta().getPersistentDataContainer().get(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING), type);
+    public Item getItem(ItemStack stack) {
+        final String customItemName = stack.getItemMeta().getPersistentDataContainer().get(WyvenItems.WYVEN_ITEM, PersistentDataType.STRING);
+        return getItem(customItemName);
     }
 
-    public Item getCustomItem(String name) {
+    public Item getItem(String name) {
         return customItems.stream()
-                .filter(item -> item.getName().equalsIgnoreCase(name))
-                .findFirst()
-                .orElse(null);
-    }
-
-    public Item getCustomItem(String name, ItemType type) {
-        return customItems.stream()
-                .filter(item -> item.getType() == type)
                 .filter(item -> item.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);

@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import java.util.regex.Pattern;
 
 public class HelpSubCMD extends SubCommand {
-    public HelpSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
-        super(addon.getPlugin(), name, permission, minArgs);
+    public HelpSubCMD(WyvenItems addon, String name, String permission, int minArgs, boolean playerCommand) {
+        super(addon.getPlugin(), name, permission, minArgs, playerCommand);
     }
 
     @Override

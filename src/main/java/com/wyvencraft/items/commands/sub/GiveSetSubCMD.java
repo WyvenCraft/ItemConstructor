@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 public class GiveSetSubCMD extends SubCommand {
     private final WyvenItems addon;
 
-    public GiveSetSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
-        super(addon.getPlugin(), name, permission, minArgs);
+    public GiveSetSubCMD(WyvenItems addon, String name, String permission, int minArgs, boolean playerCommand) {
+        super(addon.getPlugin(), name, permission, minArgs, playerCommand);
         this.addon = addon;
     }
 

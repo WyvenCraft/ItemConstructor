@@ -4,6 +4,7 @@ import com.wyvencraft.api.addon.Addon;
 import com.wyvencraft.api.integration.IWyvenCore;
 import com.wyvencraft.items.commands.ItemsCMD;
 import com.wyvencraft.items.commands.ItemsTabCompleter;
+import com.wyvencraft.items.commands.sub.*;
 import com.wyvencraft.items.managers.ItemManager;
 import com.wyvencraft.items.managers.RecipeManager;
 import com.wyvencraft.items.menus.ItemsMenu;
@@ -36,7 +37,7 @@ public class WyvenItems extends Addon implements Listener {
         ITEM_TYPE = new NamespacedKey(this.getPlugin().getPlugin(), "type");
         recipeManager = new RecipeManager(this, getPlugin().getLanguageManager());
         itemManager = new ItemManager(this, getPlugin().getLanguageManager(), recipeManager);
-        orbManager = new OrbManager();
+        orbManager = new OrbManager(this);
     }
 
     @Override
@@ -49,8 +50,13 @@ public class WyvenItems extends Addon implements Listener {
 
     @Override
     public void onEnable() {
-        getPlugin().registerCommand("wyvenitems",
-                new ItemsCMD(this),
+        getPlugin().registerCommand("wyvenitems", new ItemsCMD(
+                        new MenuSubCMD(this, "open", "wyvencore.items.open", 0, true),
+                        new HelpSubCMD(this, "help", "wyvencore.items.help", 0, false),
+                        new GiveSetSubCMD(this, "giveset", "wyvencore.items.giveset", 0, false),
+                        new GiveSubCMD(this, "give", "wyvencore.items.giveitem", 0, false),
+                        new LockRecipeSubCMD(this, "lock", "wyvencore.items.lockrecipe", 0, false),
+                        new UnlockRecipSubCMD(this, "unlock", "wyvencore.items.unlockrecipe", 0, false)),
                 new ItemsTabCompleter(this),
                 "Main command to accessing and giving custom items",
                 "/wyvenitems <argument>",
@@ -66,7 +72,7 @@ public class WyvenItems extends Addon implements Listener {
 
     @Override
     public void onDisable() {
-
+        orbManager.clearAllOrbs();
     }
 
     @Override

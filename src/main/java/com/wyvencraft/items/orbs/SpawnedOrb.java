@@ -25,7 +25,7 @@ public class SpawnedOrb extends BukkitRunnable {
     private final ArmorStand armorStand;
 
     int tick = 0;
-    final double maxHeight = 1.5;
+    final double maxHeight = 0.3;
     boolean directionUp = true;
 
     double remaining;
@@ -63,13 +63,13 @@ public class SpawnedOrb extends BukkitRunnable {
         armorStand.remove();
         clearEffects();
         applied.clear();
-        WyvenItems.instance.getOrbManager().activeOrb.remove(owner);
     }
 
     @Override
     public void run() {
         if (remaining <= 0 || !owner.isOnline()) {
-            cancel();
+            orbManager.disableOrb(owner);
+//            cancel();
             return;
         }
 

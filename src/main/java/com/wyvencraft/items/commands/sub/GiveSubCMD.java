@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 public class GiveSubCMD extends SubCommand {
     private final WyvenItems addon;
 
-    public GiveSubCMD(WyvenItems addon, String name, String permission, int minArgs) {
-        super(addon.getPlugin(), name, permission, minArgs);
+    public GiveSubCMD(WyvenItems addon, String name, String permission, int minArgs, boolean playerCommand) {
+        super(addon.getPlugin(), name, permission, minArgs, playerCommand);
         this.addon = addon;
     }
 
@@ -30,12 +30,12 @@ public class GiveSubCMD extends SubCommand {
             return;
         }
 
-        if (addon.getItemManager().getCustomItem(args[0]) == null) {
+        if (addon.getItemManager().getItem(args[0]) == null) {
             getPlugin().getLanguageManager().sendMessage(sender, "ITEMS.INVALID_ITEM", r -> r.replace("{0}", args[0]));
             return;
         }
 
-        giveItem = addon.getItemManager().getCustomItem(args[0]);
+        giveItem = addon.getItemManager().getItem(args[0]);
 
         if (args.length >= 2) {
             giveTarget = Bukkit.getPlayer(args[1]);

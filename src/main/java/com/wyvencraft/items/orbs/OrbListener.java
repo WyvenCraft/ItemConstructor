@@ -1,6 +1,5 @@
 package com.wyvencraft.items.orbs;
 
-import com.wyvencraft.items.WyvenItems;
 import com.wyvencraft.items.enums.ItemType;
 import com.wyvencraft.items.managers.ItemManager;
 import org.bukkit.Material;
@@ -12,18 +11,19 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public record OrbListener(ItemManager itemManager,
                           OrbManager orbManager) implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlaceOrb(BlockPlaceEvent event) {
-        WyvenItems.instance.getPlugin().printDebug("placed");
-
         final Player player = event.getPlayer();
-        if (itemManager.isItemOfType(player, ItemType.ORB, true)) {
-            WyvenItems.instance.getPlugin().printDebug("orb");
 
+        final ItemStack hand = itemManager.getHand(player, true);
+        if (hand == null) return;
+
+        if (itemManager.isItemOfType(ItemType.ORB, hand)) {
             event.setCancelled(true);
 
             // Check to see if the player is already having an active orb
@@ -33,7 +33,7 @@ public record OrbListener(ItemManager itemManager,
             }
 
             // Check to see if blocks are blocking the orb
-            Block block = event.getBlock(); // Cannot be null because we know we are clicking a block
+            Block block = event.getBlock();
             for (int i = 1; i <= 2; i++) {
                 if (block.getRelative(BlockFace.UP, i).getType() != Material.AIR) {
                     player.sendMessage("Not enough room above orb to spawn here");//TODO ROOM_UNAVAILABLE
@@ -42,10 +42,11 @@ public record OrbListener(ItemManager itemManager,
             }
 
             // Get the orb from player's hand
-            Orb orb = (Orb) itemManager.getCustomItem(player.getInventory().getItemInMainHand(), ItemType.ORB);
+            Orb orb = (Orb) itemManager.getItem(hand);
 
             // Check if orb is on cooldown
             double cooldown = orbManager.getCooldown(player, orb);
+            player.sendMessage("cooldown: " + cooldown);
             if (cooldown > 0.0d) {
                 player.sendMessage("cooldown for another " + cooldown + " seconds");//TODO ORB_COOLDOWN
                 return;

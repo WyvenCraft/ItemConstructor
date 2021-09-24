@@ -14,14 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class RecipeManager {
-    private final WyvenItems addon;
-    private final LanguageManager lang;
-
-    public RecipeManager(WyvenItems addon, LanguageManager lang) {
-        this.addon = addon;
-        this.lang = lang;
-    }
+public record RecipeManager(WyvenItems addon, LanguageManager lang) {
 
     public ItemRecipe createRecipe(ConfigurationSection recipeSection, ItemStack result) {
         Map<Integer, ItemStack> recipe = new HashMap<>();
@@ -37,7 +30,7 @@ public final class RecipeManager {
 
             int amount = 1;
             if (ingredStr.length > 1) {
-                int input = Utils.getInteger(ingredStr[1]);
+                final int input = Utils.getInteger(ingredStr[1]);
                 amount = input != -1 ? input : amount;
             }
 
